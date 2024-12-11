@@ -1,0 +1,7 @@
+1,Điều hành,Tầng 5/ Tòa A10,0969851616
+2,Dự án,Tầng 3/ Tòa A1,0982414127
+3,Quản lý nhân sự,Tầng 1/ Tòa B1,0967341010
+4,Marketing,Tầng 4/ Tòa C2,0798429841
+5,Kỹ thuật,Tầng 1/ Tòa C1,0977010200
+6,Kế hoạch,Tầng 7/ Tòa C2,0372884712
+7,Tài chính,Tầng 5/ Tòa A1,0966681313

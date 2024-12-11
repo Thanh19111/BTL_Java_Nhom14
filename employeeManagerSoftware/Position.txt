@@ -1,0 +1,16 @@
+1,Giám đốc điều hành,125.0
+2,Giám đốc tài chính,105.0
+3,Giám đốc Marketing,100.0
+4,Giám đốc pháp lý,95.0
+5,Giám đốc thương mại,110.0
+6,Giám đốc vận hành,115.0
+7,Trưởng phòng nhân sự,75.0
+8,Quản lý CNTT,70.0
+9,Trưởng phòng tiếp thị,65.0
+10,Quản lý sản phẩm,54.0
+11,Quản lý bán hàng,50.0
+12,Nhân viên bán hàng,14.0
+13,Nhân viên kế toán,12.0
+14,Kỹ sư phần mềm,21.0
+15,Nhân viên nhân sự,17.0
+16,Phân tích nghiệp vụ,35.0

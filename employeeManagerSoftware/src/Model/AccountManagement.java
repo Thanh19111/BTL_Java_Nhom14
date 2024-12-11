@@ -1,71 +1,69 @@
 package Model;
-
-import java.io.*;
 import java.util.*;
 
+
+import Utils.Utils;
+import Data.DatabaseConnection;
+
 public class AccountManagement {
-    private static final String FILE_NAME = "D:\\Account.txt";
-    private Map<String, Account> accounts;
+    private ArrayList<Account> accounts = new ArrayList<Account>();
 
     public AccountManagement() {
-    	accounts = new HashMap<>();
         loadAccounts();
     }
 
     public void loadAccounts() {
     	accounts.clear();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 2) {
-                    accounts.put(parts[0], new Account(parts[0], parts[1]));
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Không thể đọc file tài khoản.");
-        }
+        accounts = DatabaseConnection.AccountQuery("select * from Account");
     }
 
-    public void saveAccounts() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            for (Account account : accounts.values()) {
-                writer.write(account.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Không thể lưu file tài khoản.");
-        }
-    }
 
     public void addAccount(String username, String password) {
-        if (accounts.containsKey(username)) {
-            System.out.println("Tài khoản đã tồn tại.");
-            return;
-        }
-        accounts.put(username, new Account(username, password));
-        saveAccounts();
+    	username = Utils.encrypt(username.trim());
+    	password = Utils.encrypt(password.trim());
+    	
+        String sql = "EXECUTE AddAccount " + username + ", N'" + password +"'";
+        DatabaseConnection.AccountExecProc(sql);
         System.out.println("Thêm tài khoản thành công!");
     }
 
     public int removeAccount(String username) {
-    	if (username == null || username.trim().isEmpty()) return 3;
-        if (!accounts.containsKey(username)) return 1;
-        accounts.remove(username);
-        saveAccounts();
-        return 2;
+    	username = Utils.encrypt(username.trim());
+    	
+    	if (username == null || username.isEmpty()) return 3;
+    	
+    	for(Account i : this.getAccounts())
+    	{
+    		if(i.getUsername().equals(username))
+    		{
+    			String sql = "EXECUTE DeleteAccount " + "N'" + username +"'";
+    	        DatabaseConnection.AccountExecProc(sql);
+    	        System.out.println("Xóa tài khoản thành công!");
+    	        return 2;
+    		}
+    		
+    	}
+    	return 1;
     }
 
     public int editAccount(String username, String newPassword) {
-    	if (username == null || username.trim().isEmpty()) return 3;
-    	if (newPassword == null || newPassword.trim().isEmpty()) return 4;
-        Account account = accounts.get(username);
-        if (account == null) return 1;
-        else {
-        	account.setPassword(newPassword);
-            saveAccounts();
-            return 2;
-        }
+    	username = Utils.encrypt(username.trim());
+    	newPassword = Utils.encrypt(newPassword.trim());
+    	
+    	if (username == null || username.isEmpty()) return 3;
+    	if (newPassword == null || newPassword.isEmpty()) return 4;
+    	
+    	for(Account acc : this.getAccounts())
+    	{
+    		if(acc.getUsername().equals(username))
+    		{
+    			String sql = "EXECUTE UpdateAccount " + "N'" + username +"' ," + " N'" + newPassword +"'";
+    			DatabaseConnection.AccountExecProc(sql);
+    			System.out.print("Sửa tài khoản thành công");
+    			return 2;
+    		}
+    	}
+    	return 1;
     }
 
     public void AccountsDisplay() {
@@ -74,13 +72,13 @@ public class AccountManagement {
             System.out.println("Không có tài khoản nào trong hệ thống.");
         } else {
             System.out.println("Danh sách tài khoản:");
-            for (Map.Entry<String, Account> entry : accounts.entrySet()) {
-                System.out.println(entry.getValue().toString());
+            for (Account account : accounts) {
+                System.out.println(account.toString());
             }
         }
     }
     
-    public Map<String, Account> getAccounts() {
-        return accounts;
+    public ArrayList<Account> getAccounts() {
+        return DatabaseConnection.AccountQuery("select * from Account");
     }
 }

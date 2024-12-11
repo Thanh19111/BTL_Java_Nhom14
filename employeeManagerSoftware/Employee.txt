@@ -1,0 +1,7 @@
+1,Nguyễn Văn Nam,15/03/2003,Nam,Hà Nội,0277382439,01/02/2024,21.7,7.0,Kỹ sư phần mềm,Kỹ thuật
+2,Trần Thanh Phong,16/12/2004,Nam,Bắc Ninh,0988094854,01/04/2023,22.2,12.0,Kỹ sư phần mềm,Kỹ thuật
+3,Nguyễn Thị Thanh,02/07/2002,Nữ,Nam Định,0433853235,01/08/2024,14.0,0.0,Nhân viên bán hàng,Marketing
+4,Lê Thanh Hải,09/07/1996,Nam,Hà Nội,0975662317,01/05/2018,56.4,24.0,Quản lý sản phẩm,Điều hành
+5,Trần Linh Phương,01/01/1992,Nữ,Nghệ An,0433502891,01/02/2013,115.2,52.0,Giám đốc thương mại,Điều hành
+6,Nguyễn Văn Công,07/08/1976,Nam,Hải Phòng,0163825628,15/07/1997,135.3,103.0,Giám đốc điều hành,Điều hành
+7,Lý Thái Tông,27/09/1991,Nam,Hải Dương,0375577889,01/03/2012,37.8,28.0,Phân tích nghiệp vụ,Quản lý nhân sự

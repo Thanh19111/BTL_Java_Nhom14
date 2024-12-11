@@ -194,7 +194,7 @@ public class Employee {
     	return employeeDepartment = new Department();
     }
     
-    public int intput(String id, String name, String bỉrthDate, String gender, String homeTown, 
+    public int input(String id, String name, String bỉrthDate, String gender, String homeTown, 
     					String phoneNumber, String hỉreDate, String overTimeHour, String positionName, String departmentName) {
     	
     	this.setEmployeeId(Integer.parseInt(id));

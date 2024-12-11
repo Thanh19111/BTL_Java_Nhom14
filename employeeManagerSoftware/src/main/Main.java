@@ -1,9 +1,9 @@
 package main;
 
-import Model;
+import View.Login;
 
 public class Main {
 	public static void main(String[] args) {
-		//test model
+		Login loginView = new Login();
 	}
 }

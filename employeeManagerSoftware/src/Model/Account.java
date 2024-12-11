@@ -1,7 +1,9 @@
 package Model;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Scanner;
+
+import Utils.Utils;
 
 public class Account {
 
@@ -54,29 +56,43 @@ public class Account {
     }
 
     // Static methods to handle registration and login
-    public static int register(Map<String, Account> accounts, String username, String password) {
-    	if (username == null || username.trim().isEmpty()) return 3;
-    	if (password == null || password.trim().isEmpty()) return 4;
-    	if (accounts.containsKey(username)) {
-            return 1;
-        } 
-        else {
-            accounts.put(username, new Account(username, password));
-            return 2;
-        }
+    public static int register(ArrayList<Account> accounts, String username, String password) 
+    {
+    	username = Utils.encrypt(username.trim());
+    	password = Utils.encrypt(password.trim());
+    	
+    	if (username == null || username.isEmpty()) return 3;
+    	if (password == null || password.isEmpty()) return 4;
+    	for(Account account : accounts)
+    	{
+    		if(account.getUsername().equals(username))
+    		{
+    			return 1;
+    		}
+    	}
+    	
+        return 2;
     }
 
-    public static int login(Map<String, Account> accounts, String username, String password) {
-        Account account = accounts.get(username);
-        if (username == null || username.trim().isEmpty()) return 4;
-    	if (password == null || password.trim().isEmpty()) return 5;
-        if (account == null) {
-            return 1;
-        }
-        if (account.getPassword().equals(password)) {
-            return 2;
-        } else {
-            return 3;
-        }
+    public static int login(ArrayList<Account> accounts, String username, String password) {
+    	username = Utils.encrypt(username.trim());
+    	password = Utils.encrypt(password.trim());
+    	
+        if (username == null || username.isEmpty()) return 4;
+    	if (password == null || password.isEmpty()) return 5;
+    	
+    	for(Account acc : accounts)
+    	{
+    		if(acc.getUsername().equals(username))
+    		{
+    			if (acc.getPassword().equals(password)) {
+    	            return 2;
+    	        } else {
+    	            return 3;
+    	        }
+    		}
+    		
+    	}
+    	return 1;
     }
 }
