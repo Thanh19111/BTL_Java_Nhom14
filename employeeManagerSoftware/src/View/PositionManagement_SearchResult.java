@@ -17,18 +17,27 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class PositionManagement_SearchResult extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-
-    public PositionManagement_SearchResult(String id, String positionName, String salary) {
-    	this.init(id, positionName, salary);
-		setVisible(true);
+private static String id; private static String positionName; private static String salary;
+    
+    public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PositionManagement_SearchResult frame = new PositionManagement_SearchResult(id,positionName,salary);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-
-    public void init(String id, String positionName, String salary) {
+    public PositionManagement_SearchResult(String id, String positionName, String salary) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();

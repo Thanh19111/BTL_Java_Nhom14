@@ -2,10 +2,16 @@ package View;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import Controller.editPositionSalaryListener;
+import Data.DatabaseConnection;
+import Model.Position;
 import PositionSalaryManagementTest.PositionSalaryManagement_Main;
+import Utils.Utils;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,9 +21,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class PositionSalaryManagement_EditPositionSalary extends JFrame {
 
@@ -29,15 +37,42 @@ public class PositionSalaryManagement_EditPositionSalary extends JFrame {
     private JTextField idTextField;
     private JTextField salaryTexField;
     private PositionSalaryManagement_Main psmm;
-    
+    private JTextField positionNameTextField;
 
-    public PositionSalaryManagement_EditPositionSalary() {
-    	this.psmm = new PositionSalaryManagement_Main();
-    	this.init();
-		setVisible(true);
+    private DefaultTableModel tableModel;
+    private JTable table_1;
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PositionSalaryManagement_EditPositionSalary frame = new PositionSalaryManagement_EditPositionSalary();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
-    
-    public void init() {
+	private void loadPosition()
+	{
+		tableModel.setRowCount(0);
+	    ArrayList<Position> arrayList = DatabaseConnection.Pos("SELECT * from Position");
+	    for (int i = 0; i < arrayList.size(); i++) {
+	        Position pos = arrayList.get(i);
+	        tableModel.addRow(new Object[]{
+	            Utils.decrypt(String.valueOf(pos.getPositionID())),
+	            pos.getPositionName(),
+	            pos.getPositionSalary()
+	        });
+	    }
+	}
+    public PositionSalaryManagement_EditPositionSalary() {
+    	String[] columnNames = {
+                "ID", "Chức vụ","Lương"
+    	};
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();
@@ -69,7 +104,7 @@ public class PositionSalaryManagement_EditPositionSalary extends JFrame {
         });
         confirmButton.setBackground(new Color(255, 255, 255));
         confirmButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        confirmButton.setBounds(393, 410, 125, 41);
+        confirmButton.setBounds(10, 253, 125, 41);
         panel_2.add(confirmButton);
         
         cancelButton = new JButton("Hủy bỏ");
@@ -94,29 +129,23 @@ public class PositionSalaryManagement_EditPositionSalary extends JFrame {
         });
         cancelButton.setBackground(new Color(255, 255, 255));
         cancelButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        cancelButton.setBounds(555, 410, 125, 41);
+        cancelButton.setBounds(170, 253, 125, 41);
         panel_2.add(cancelButton);
         
         JLabel idText = new JLabel("ID chức vụ cần sửa");
         idText.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        idText.setBounds(393, 11, 207, 30);
+        idText.setBounds(10, 20, 207, 30);
         panel_2.add(idText);
-        
-        idTextField = new JTextField();
-        idTextField.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        idTextField.setColumns(10);
-        idTextField.setBounds(392, 51, 285, 41);
-        panel_2.add(idTextField);
         
         salaryTexField = new JTextField();
         salaryTexField.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         salaryTexField.setColumns(10);
-        salaryTexField.setBounds(393, 149, 285, 41);
+        salaryTexField.setBounds(10, 179, 285, 41);
         panel_2.add(salaryTexField);
         
         JLabel salaryText = new JLabel("Mức lương mới");
         salaryText.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        salaryText.setBounds(393, 109, 207, 30);
+        salaryText.setBounds(10, 122, 207, 30);
         panel_2.add(salaryText);
         
         JPanel panel_1 = new JPanel();
@@ -160,8 +189,37 @@ public class PositionSalaryManagement_EditPositionSalary extends JFrame {
         sụaLuongChucVuText.setFont(new Font("Segoe UI", Font.BOLD, 20));
         sụaLuongChucVuText.setBounds(415, 21, 242, 61);
         panel_1.add(sụaLuongChucVuText);
+        tableModel = new DefaultTableModel(columnNames, 0);
+ table_1 = new JTable(tableModel);
         
-    }
+        table_1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = table_1.rowAtPoint(evt.getPoint());
+                
+                idTextField.setText(table_1.getValueAt(row, 0).toString());
+                
+                positionNameTextField.setText(table_1.getValueAt(row, 1).toString());
+                salaryTexField.setText(table_1.getValueAt(row, 2).toString());
+            	}
+        })
+        ;
+        
+        table_1.setBounds(462, 47, 590, 213);
+        panel_2.add(table_1);
+        
+        JScrollPane scrollPane = new JScrollPane(table_1);
+        scrollPane.setBounds(392, 20, 406, 496);
+        panel_2.add(scrollPane);
+        
+        idTextField = new JTextField();
+        panel_2.add(idTextField);
+        idTextField.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+        idTextField.setColumns(10);
+        idTextField.setBounds(10, 60, 285, 41);
+        
+        loadPosition();
+        }
+    
     
     public void editPositionSalary() {
     	String id = idTextField.getText().trim();
@@ -181,4 +239,5 @@ public class PositionSalaryManagement_EditPositionSalary extends JFrame {
     		JOptionPane.showMessageDialog(this, "ID không tồn tại.", "Lỗi", JOptionPane.INFORMATION_MESSAGE);
     	}
     }
+   
 }

@@ -22,20 +22,22 @@ public class EmployeeManagement_SearchResult extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
-
-    public EmployeeManagement_SearchResult(String ID, String employeeName,
+    
+    public EmployeeManagement_SearchResult(int ID, String employeeName,
     										String birthDate, String gender, String homeTown, String phoneNumber, 
-    										String hireDate, String salary, String overtimeHour, String positionName, 
-    										String departmentName) {
+    										String hireDate, double salary, float overtimeHour, int positionName, 
+    										int departmentName) {
 		this.init(ID, employeeName, birthDate, gender, homeTown, phoneNumber, hireDate, salary, overtimeHour, 
 					positionName, departmentName);
 		setVisible(true);
 	}
 
-    public void init(String ID, String employeeName,
+   
+
+	public void init(int ID, String employeeName,
 						String birthDate, String gender, String homeTown, String phoneNumber, 
-						String hireDate, String salary, String overtimeHour, String positionName, 
-						String departmentName) {
+						String hireDate, double salary, float overtimeHour, int positionName, 
+						int departmentName) {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();

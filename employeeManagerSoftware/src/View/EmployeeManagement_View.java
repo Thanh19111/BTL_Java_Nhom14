@@ -2,6 +2,7 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -12,6 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import Controller.EmployeeViewListener;
+import Data.DatabaseConnection;
+import Model.Department;
+import Model.Employee;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,6 +30,8 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JTable;
@@ -37,20 +43,41 @@ public class EmployeeManagement_View extends JFrame {
     private JPanel contentPane;
     private JTextField ID_SearchBox;
     private DefaultTableModel tableModel;
+    
+    private JTable table_1;
+    /**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					DepartmentManagement_ViewMain frame = new DepartmentManagement_ViewMain();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
+	/**
+	 * Create the frame.
+	 */
     public EmployeeManagement_View() {
-        String[] columnNames = {
-            "ID", "Tên", "Ngày sinh", "Giới tính", "Quê quán", "Số điện thoại", "Ngày vào làm", "Lương(tr)", 
-            "Tăng ca(h)", "Chức vụ", "Phòng ban"
-        };
-        tableModel = new DefaultTableModel(columnNames, 0);
+       
         this.init();
         setVisible(true);
     }
 
     public void init() {
+    	 String[] columnNames = {
+            "ID", "Tên", "Ngày sinh", "Giới tính", "Quê quán", "Số điện thoại", "Ngày vào làm", "Hệ số lương", 
+            "Tăng ca(h)", "Chức vụ", "Phòng ban"
+        };
+        tableModel = new DefaultTableModel(columnNames, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1076, 600);
+        setBounds(100, 100, 1088, 600);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -283,7 +310,7 @@ public class EmployeeManagement_View extends JFrame {
         
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
-        panel_2.setBounds(177, 0, 885, 54);
+        panel_2.setBounds(177, 0, 897, 54);
         contentPane.add(panel_2);
         
         JButton addEmployeeButton = new JButton("Thêm");
@@ -376,7 +403,7 @@ public class EmployeeManagement_View extends JFrame {
         ID_SearchBox = new JTextField();
         ID_SearchBox.setText("Nhập ID nhân viên"); // Đặt placeholder ban đầu
         ID_SearchBox.setForeground(Color.GRAY); // Màu văn bản placeholder
-        ID_SearchBox.setBounds(627, 9, 148, 37);
+        ID_SearchBox.setBounds(620, 12, 148, 37);
         ID_SearchBox.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         panel_2.add(ID_SearchBox);
         ID_SearchBox.setColumns(10);
@@ -403,7 +430,7 @@ public class EmployeeManagement_View extends JFrame {
         JButton employeeSearchButton = new JButton("Tìm kiếm");
         ActionListener ac = new EmployeeViewListener(this);
         employeeSearchButton.addActionListener(ac);
-        employeeSearchButton.setBounds(785, 7, 100, 40);
+        employeeSearchButton.setBounds(778, 10, 100, 40);
         employeeSearchButton.setBackground(new Color(255, 255, 255));
         employeeSearchButton.addMouseListener(new MouseAdapter() {
         	@Override
@@ -457,24 +484,20 @@ public class EmployeeManagement_View extends JFrame {
         contentPane.add(panel_3);
         panel_3.setLayout(new BorderLayout(0, 0));
         
-		JTable employeeTable = new JTable(tableModel);
-        employeeTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        JScrollPane scrollPane = new JScrollPane(employeeTable);
+        tableModel = new DefaultTableModel(columnNames, 0);
+ 
+        
+        table_1 = new JTable(tableModel);
+       
+        
+        table_1.setBounds(462, 47, 590, 213);
+        panel_3.add(table_1);
+        
+        JScrollPane scrollPane = new JScrollPane(table_1);
+        scrollPane.setBounds(427, 47, 661, 404);
         panel_3.add(scrollPane, BorderLayout.CENTER);
-        TableColumnModel columnModel = employeeTable.getColumnModel();
-        // Đặt độ rộng ưu tiên cho từng cột
-        columnModel.getColumn(0).setPreferredWidth(10); 
-        columnModel.getColumn(1).setPreferredWidth(105);
-        columnModel.getColumn(2).setPreferredWidth(60); 
-        columnModel.getColumn(3).setPreferredWidth(50);  
-        columnModel.getColumn(4).setPreferredWidth(65);
-        columnModel.getColumn(5).setPreferredWidth(75); 
-        columnModel.getColumn(6).setPreferredWidth(90); 
-        columnModel.getColumn(7).setPreferredWidth(65);
-        columnModel.getColumn(8).setPreferredWidth(60);
-        columnModel.getColumn(9).setPreferredWidth(100);
-        columnModel.getColumn(10).setPreferredWidth(100);
-        loadAccountData();
+        
+        loadEmployeeData();
         
         JPanel panel_4 = new JPanel();
         panel_4.setBackground(new Color(224, 255, 255));
@@ -482,20 +505,7 @@ public class EmployeeManagement_View extends JFrame {
         contentPane.add(panel_4);
     }
     
-    public void loadAccountData() {
-        String filePath = "D:\\Employee.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] accountData = line.split(",");
-                if (accountData.length == 11) {
-					tableModel.addRow(accountData);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    
     
 	public void employee_search() {
 	    String id = ID_SearchBox.getText().trim();
@@ -505,31 +515,43 @@ public class EmployeeManagement_View extends JFrame {
 	    }
 
 	    boolean accountFound = false;
-	    String filePath = "D:\\Employee.txt";
-
-	    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-	        String line;
-	        while ((line = br.readLine()) != null) {
-	            String[] employeeData = line.split(",");
-	            if (employeeData.length == 11 && employeeData[0].equals(id)) {
-	            	accountFound = true;
-	            	
-	            	EmployeeManagement_SearchResult searchResultFrame = new EmployeeManagement_SearchResult(employeeData[0], 
-	            															employeeData[1], employeeData[2], employeeData[3],
-	            															employeeData[4], employeeData[5], employeeData[6], 
-	            															employeeData[7],employeeData[8], employeeData[9], 
-	            															employeeData[10]);
-	                searchResultFrame.setVisible(true);
-	                this.dispose();
-	                break;
-	            }
-	        }
-	    } catch (IOException e) {
-	        e.printStackTrace();
+	    ArrayList<Employee> arr = DatabaseConnection.EmployeeQuery("select * from Employee");
+	    for(int  i=0; i<arr.size();i++)
+	    {
+	    	if(arr.get(i).getEmployeeId() == Integer.parseInt(id))
+	    	{
+	    		accountFound = true;
+            	
+            	EmployeeManagement_SearchResult searchResultFrame = new EmployeeManagement_SearchResult(arr.get(i).getEmployeeId(), 
+            			arr.get(i).getEmployeeName(), arr.get(i).getBirthDate(),arr.get(i).getGender(),
+            			arr.get(i).getHometown(), arr.get(i).getPhoneNumber(), arr.get(i).getHireDate(), arr.get(i).getSalary(),
+            			arr.get(i).getOvertimeHours(), arr.get(i).getEmployeePosition(), 
+            			arr.get(i).getEmployeeDepartment() );
+                searchResultFrame.setVisible(true);
+                this.dispose();
+	    	}
 	    }
-
-	    if (!accountFound) {
+		    if (!accountFound) {
 	        JOptionPane.showMessageDialog(this, "ID không tồn tại.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	    }
+	}
+	public void loadEmployeeData() {
+	    ArrayList<Employee> arrayList = DatabaseConnection.EmployeeQuery("select * from Employee");
+	    for (int i = 0; i < arrayList.size(); i++) {
+	        Employee employee = arrayList.get(i);
+	        tableModel.addRow(new Object[]{
+	            employee.getEmployeeId(),
+	            employee.getEmployeeName(),
+	            employee.getBirthDate(),
+	            employee.getGender(),
+	            employee.getHometown(),
+	            employee.getPhoneNumber(),
+	            employee.getHireDate(),
+	            employee.getSalary(),
+	            employee.getOvertimeHours(),
+	            employee.getEmployeePosition(),
+	            employee.getEmployeeDepartment()
+	            });
 	    }
 	}
 }

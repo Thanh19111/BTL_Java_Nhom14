@@ -12,9 +12,9 @@ public class PositionManagement_Main {
 	}
 
         
-    public int addPosition(String id, String positionName, String salary) {
-    	Position ps = new Position(Integer.parseInt(id), positionName, Double.parseDouble(salary));
-    	return pm.addPosition(ps);
+    public int addPosition(int id, String positionName, String salary) {
+    	Position ps = new Position(id, positionName, Double.parseDouble(salary));
+    	return pm.addPosition(ps.getPositionID(),ps.getPositionName(),ps.getPositionSalary());
     }
     	
     public int removePosition(String id) {

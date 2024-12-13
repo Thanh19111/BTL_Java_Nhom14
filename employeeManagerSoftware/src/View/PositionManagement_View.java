@@ -2,6 +2,7 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -11,6 +12,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.PositionViewListener;
+import Data.DatabaseConnection;
+import Model.Account;
+import Model.Position;
+import Utils.Utils;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JTable;
@@ -32,21 +38,33 @@ import java.awt.Color;
 
 public class PositionManagement_View extends JFrame {
 
+
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private JTextField ID_SearchBox;
     private DefaultTableModel tableModel;
-
-    public PositionManagement_View() {
-    	String[] columnNames = {
-                "ID", "Tên chức vụ", "Lương"
-            };
-    	tableModel = new DefaultTableModel(columnNames, 0);
-    	this.init();
-		setVisible(true);
+    ArrayList<Position> pos;
+    public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PositionManagement_View frame = new PositionManagement_View();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
+ 
 
-    public void init() {
+    public PositionManagement_View (){
+   
+    	this.loadPositionMain();
+    	String[] columnNames = {
+	            "ID", "Chức vụ","Lương"
+	        };
+    	this.tableModel = new DefaultTableModel(columnNames, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();
@@ -98,6 +116,10 @@ public class PositionManagement_View extends JFrame {
         panel_1.add(employeeButton);
         
         JButton positionButton = new JButton("Chức vụ");
+        positionButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         positionButton.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseEntered(MouseEvent e) {
@@ -460,28 +482,27 @@ public class PositionManagement_View extends JFrame {
         employeeTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         panel_3.add(scrollPane, BorderLayout.CENTER);
-        loadPositionData();
+        loadPosition();
         
         JPanel panel_4 = new JPanel();
         panel_4.setBackground(new Color(224, 255, 255));
         panel_4.setBounds(166, 0, 896, 562);
         contentPane.add(panel_4);
     }
-    
-    public void loadPositionData() {
-        String filePath = "D:\\Position.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] accountData = line.split(",");
-                if (accountData.length == 3) {
-					tableModel.addRow(accountData);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void loadPositionMain() {
+        this.pos = DatabaseConnection.Pos("select * from Position");
     }
+    private void loadPosition()
+   	{
+    	for (int i = 0; i < this.pos.size(); i++) {
+	        Position pos = this.pos.get(i);
+	        this.tableModel.addRow(new Object[]{
+	            Utils.decrypt(String.valueOf(pos.getPositionID())),
+	            pos.getPositionName(),
+	            pos.getPositionSalary()
+	        });
+	    }
+   	}
     
     public void position_search() {
     	String id = ID_SearchBox.getText().trim();
@@ -491,28 +512,24 @@ public class PositionManagement_View extends JFrame {
     	}
 
 	    boolean accountFound = false;
-	    String filePath = "D:\\Position.txt";
-
-	    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-	        String line;
-	        while ((line = br.readLine()) != null) {
-	            String[] employeeData = line.split(",");
-	            if (employeeData.length == 3 && employeeData[0].equals(id)) {
-	            	accountFound = true;
-	            	
-	            	PositionManagement_SearchResult searchResultFrame = new PositionManagement_SearchResult(employeeData[0], 
-	            															employeeData[1], employeeData[2]);
-	                searchResultFrame.setVisible(true);
-	                this.dispose();
-	                break;
-	            }
-	        }
-	    } catch (IOException e) {
-	        e.printStackTrace();
+	    for (Position pss : this.pos)
+	    {String ids = String.valueOf(pss.getPositionID());
+	    	if (ids==id)
+	    	{
+	    		accountFound = true;
+	    		PositionManagement_SearchResult searchResultFrame = new PositionManagement_SearchResult(String.valueOf(pss.getPositionID()), pss.getPositionName(), String.valueOf(pss.getPositionSalary()));
+	    		searchResultFrame.setVisible(true);
+	    		this.dispose();
+	    	}
 	    }
+	        
 
 	    if (!accountFound) {
 	        JOptionPane.showMessageDialog(this, "ID không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
+    
+    public void loadAccountData() {
+        this.pos = DatabaseConnection.Pos("select * from Position");
+    }
 }

@@ -2,9 +2,14 @@ package View;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import Controller.RemoveEmployeeListener;
+import Data.DatabaseConnection;
+import Model.Employee;
 import employeeManagementTest.EmployeeManagement_Main;
 
 import javax.swing.JLabel;
@@ -15,9 +20,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class EmployeeManagement_RemoveEmployee extends JFrame {
 
@@ -27,7 +34,28 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
     private JButton confirmButton;
     private JButton cancelButton;
     private EmployeeManagement_Main emm;
+    private DefaultTableModel tableModel;
+    private JTable table_1;
 
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					EmployeeManagement_RemoveEmployee frame = new EmployeeManagement_RemoveEmployee();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
     public EmployeeManagement_RemoveEmployee() {
     	this.emm = new EmployeeManagement_Main();
 		this.init();
@@ -35,8 +63,14 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
 	}
     
     public void init() {
+    	String[] columnNames = {
+    			"ID", "Tên ", "Ngày sinh", "Giới tính","Quê quán","Số điện thoại","Ngày vào làm","Lương","tăng ca","chức vụ","Phòng ban"
+            };
+		
+		
+		tableModel = new DefaultTableModel(columnNames, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1076, 600);
+        setBounds(100, 100, 1395, 753);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -45,19 +79,19 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
         
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
-        panel_2.setBounds(0, 91, 1062, 472);
+        panel_2.setBounds(0, 91, 1381, 615);
         contentPane.add(panel_2);
         panel_2.setLayout(null);
         
         nhapIDTextField = new JTextField();
         nhapIDTextField.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        nhapIDTextField.setBounds(393, 50, 285, 30);
+        nhapIDTextField.setBounds(10, 175, 285, 30);
         panel_2.add(nhapIDTextField);
         nhapIDTextField.setColumns(10);
         
         JLabel nhapIDText = new JLabel("Nhập ID");
         nhapIDText.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        nhapIDText.setBounds(393, 10, 125, 30);
+        nhapIDText.setBounds(10, 135, 125, 30);
         panel_2.add(nhapIDText);
         
         confirmButton = new JButton("Xác nhận");
@@ -78,10 +112,14 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
         });
         confirmButton.setBackground(new Color(255, 255, 255));
         confirmButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        confirmButton.setBounds(393, 410, 125, 41);
+        confirmButton.setBounds(10, 236, 125, 41);
         panel_2.add(confirmButton);
         
         cancelButton = new JButton("Hủy bỏ");
+        cancelButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        	}
+        });
         cancelButton.addMouseListener(new MouseAdapter() {
         	@Override
         	public void mouseEntered(MouseEvent e) {
@@ -103,12 +141,12 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
         });
         cancelButton.setBackground(new Color(255, 255, 255));
         cancelButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        cancelButton.setBounds(555, 410, 125, 41);
+        cancelButton.setBounds(170, 236, 125, 41);
         panel_2.add(cancelButton);
         
         JPanel panel_1 = new JPanel();
         panel_1.setBackground(new Color(25, 118, 210));
-        panel_1.setBounds(0, 0, 1062, 92);
+        panel_1.setBounds(0, 0, 1381, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
@@ -139,14 +177,37 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
         	}
         });
         backButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        backButton.setBounds(0, 0, 100, 37);
+        backButton.setBounds(1271, 31, 100, 37);
         panel_1.add(backButton);
         
         JLabel lblNewLabel_6 = new JLabel("XÓA NHÂN VIÊN");
         lblNewLabel_6.setForeground(new Color(255, 255, 255));
         lblNewLabel_6.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        lblNewLabel_6.setBounds(460, 20, 163, 53);
+        lblNewLabel_6.setBounds(601, 20, 163, 53);
         panel_1.add(lblNewLabel_6);
+        tableModel = new DefaultTableModel(columnNames, 0);
+ 
+        
+        table_1 = new JTable(tableModel);
+        
+        table_1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = table_1.rowAtPoint(evt.getPoint());
+                
+                nhapIDTextField.setText(table_1.getValueAt(row, 0).toString());
+                
+            	}
+        })
+        ;
+        
+        table_1.setBounds(462, 47, 590, 213);
+        panel_2.add(table_1);
+        
+        JScrollPane scrollPane = new JScrollPane(table_1);
+        scrollPane.setBounds(327, 54, 1044, 408);
+        panel_2.add(scrollPane);
+        
+        loadEmployeeData();
         
     }
     
@@ -159,8 +220,29 @@ public class EmployeeManagement_RemoveEmployee extends JFrame {
     	int res = emm.removeEmployee(id);
     	if (res == 1) {
 	        JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	        loadEmployeeData();
 	    } else if (res == 2) {
 	        JOptionPane.showMessageDialog(this, "ID không tồn tại!", "Lỗi", JOptionPane.INFORMATION_MESSAGE);
 	    }
     }
+    public void loadEmployeeData() {
+		tableModel.setRowCount(0);
+	    ArrayList<Employee> arrayList = DatabaseConnection.EmployeeQuery("select * from Employee");
+	    for (int i = 0; i < arrayList.size(); i++) {
+	        Employee employee = arrayList.get(i);
+	        tableModel.addRow(new Object[]{
+	            employee.getEmployeeId(),
+	            employee.getEmployeeName(),
+	            employee.getBirthDate(),
+	            employee.getGender(),
+	            employee.getHometown(),
+	            employee.getPhoneNumber(),
+	            employee.getHireDate(),
+	            employee.getSalary(),
+	            employee.getOvertimeHours(),
+	            employee.getEmployeePosition(),
+	            employee.getEmployeeDepartment()
+	        });
+	    }
+	}
 }

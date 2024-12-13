@@ -1,5 +1,7 @@
 package Utils;
 
+import java.util.Iterator;
+
 public class Utils {
 	public static String encrypt(String plaintext) {
 		int shift = 12;
@@ -16,12 +18,12 @@ public class Utils {
         }
         return cipherText.toString();
     }
-	public static String decrypt(String ciphertext) {
+	public static String decrypt(String i) {
 		int shift = 12;
         StringBuilder plainText = new StringBuilder();
         shift = shift % 26;
 
-        for (char c : ciphertext.toCharArray()) {
+        for (char c : i.toCharArray()) {
             if (Character.isLetter(c)) {
                 char base = Character.isUpperCase(c) ? 'A' : 'a';
                 plainText.append((char) ((c - base - shift + 26) % 26 + base));
@@ -31,12 +33,22 @@ public class Utils {
         }
         return plainText.toString();
     }
-	public static Integer parseIntegerOrNull(String input) {
-	    try {
-	        return Integer.parseInt(input);
-	    } catch (NumberFormatException e) {
-	        return null;
-	    }
+	public static String dateFormatorDMY(String sqldate)
+	{
+		String[] parts = sqldate.split("-");
+		if(parts.length >= 3)
+		{
+			String resString = parts[2] + "-" + parts[1] + "-" + parts[0] ;
+			return resString;
+		}else {
+			return null;
+		}
 	}
-
+	public static String dateFormatorYDM(String date)
+	{
+		String[] parts = date.split("-");
+		String resString = parts[2] + "-" + parts[1] + "-" + parts[0] ;
+		return resString;
+	}
+	
 }

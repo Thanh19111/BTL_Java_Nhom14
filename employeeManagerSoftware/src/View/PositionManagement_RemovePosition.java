@@ -2,10 +2,16 @@ package View;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import Controller.RemovePositionListener;
+import Data.DatabaseConnection;
+import Model.Position;
 import PositonManagementTest.PositionManagement_Main;
+import Utils.Utils;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,9 +21,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.EventQueue;
 
 public class PositionManagement_RemovePosition extends JFrame {
 
@@ -26,15 +34,32 @@ public class PositionManagement_RemovePosition extends JFrame {
     private JTextField idTextField;
     private JButton confirmButton;
     private JButton cancelButton;
-    private PositionManagement_Main pmm;
-
-    public PositionManagement_RemovePosition() {
-    	this.pmm = new PositionManagement_Main();
-    	this.init();
-		setVisible(true);
-	}
+    private PositionManagement_Main pmm = new PositionManagement_Main();
+    private DefaultTableModel tableModel;
+    private JTable table_1;
+    private JTextField positionNameTextField;
+    private JTextField salaryTextField;
+	/**
+	 * Launch the application.
+	 */
     
-    public void init() {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PositionManagement_RemovePosition frame = new PositionManagement_RemovePosition();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+  
+    public PositionManagement_RemovePosition (){
+    	String[] columnNames = {
+                "ID", "Chức vụ","Lương"
+            };
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();
@@ -45,19 +70,19 @@ public class PositionManagement_RemovePosition extends JFrame {
         
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
-        panel_2.setBounds(0, 91, 1062, 472);
+        panel_2.setBounds(0, 81, 1062, 472);
         contentPane.add(panel_2);
         panel_2.setLayout(null);
         
         idTextField = new JTextField();
         idTextField.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        idTextField.setBounds(393, 50, 285, 30);
+        idTextField.setBounds(10, 50, 285, 30);
         panel_2.add(idTextField);
         idTextField.setColumns(10);
         
         JLabel nhapIdText = new JLabel("Nhập ID");
         nhapIdText.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-        nhapIdText.setBounds(393, 10, 125, 30);
+        nhapIdText.setBounds(10, 0, 125, 30);
         panel_2.add(nhapIdText);
         
         confirmButton = new JButton("Xác nhận");
@@ -78,7 +103,7 @@ public class PositionManagement_RemovePosition extends JFrame {
         });
         confirmButton.setBackground(new Color(255, 255, 255));
         confirmButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        confirmButton.setBounds(393, 410, 125, 41);
+        confirmButton.setBounds(10, 139, 125, 41);
         panel_2.add(confirmButton);
         
         cancelButton = new JButton("Hủy bỏ");
@@ -102,7 +127,7 @@ public class PositionManagement_RemovePosition extends JFrame {
         });
         cancelButton.setBackground(new Color(255, 255, 255));
         cancelButton.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        cancelButton.setBounds(555, 410, 125, 41);
+        cancelButton.setBounds(170, 139, 125, 41);
         panel_2.add(cancelButton);
         
         JPanel panel_1 = new JPanel();
@@ -140,13 +165,34 @@ public class PositionManagement_RemovePosition extends JFrame {
         backButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         backButton.setBounds(0, 0, 100, 37);
         panel_1.add(backButton);
-        
+      
         JLabel lblNewLabel_6 = new JLabel("XÓA CHỨC VỤ");
         lblNewLabel_6.setForeground(new Color(255, 255, 255));
         lblNewLabel_6.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblNewLabel_6.setBounds(460, 20, 186, 53);
         panel_1.add(lblNewLabel_6);
+        tableModel = new DefaultTableModel(columnNames, 0);
         
+        
+        table_1 = new JTable(tableModel);
+        
+        table_1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = table_1.rowAtPoint(evt.getPoint());
+                
+                idTextField.setText(table_1.getValueAt(row, 0).toString());
+            	}
+        })
+        ;
+        
+        table_1.setBounds(462, 47, 590, 213);
+        panel_2.add(table_1);
+        
+        JScrollPane scrollPane = new JScrollPane(table_1);
+        scrollPane.setBounds(305, 7, 653, 455);
+        panel_2.add(scrollPane);
+        
+        loadPosition();
     }
     
     public void remove_position() {
@@ -158,8 +204,22 @@ public class PositionManagement_RemovePosition extends JFrame {
     	int res = pmm.removePosition(id);
     	if (res == 1) {
 	        JOptionPane.showMessageDialog(this, "Xóa chức vụ thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+	        loadPosition();
 	    } else if (res == 2) {
 	        JOptionPane.showMessageDialog(this, "ID không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
 	    }
     }
+    private void loadPosition()
+   	{
+   		tableModel.setRowCount(0);
+   	    ArrayList<Position> arrayList = DatabaseConnection.Pos("SELECT * from Position");
+   	    for (int i = 0; i < arrayList.size(); i++) {
+   	        Position pos = arrayList.get(i);
+   	        tableModel.addRow(new Object[]{
+   	            pos.getPositionID(),
+   	            pos.getPositionName(),
+   	            pos.getPositionSalary()
+   	        });
+   	    }
+   	}
 }

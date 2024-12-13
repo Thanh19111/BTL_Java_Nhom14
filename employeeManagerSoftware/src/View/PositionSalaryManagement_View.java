@@ -2,6 +2,7 @@ package View;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -9,6 +10,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import Data.DatabaseConnection;
+import Model.Account;
+import Model.Position;
+import Utils.Utils;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -18,8 +25,11 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+
 import java.awt.Color;
 
 public class PositionSalaryManagement_View extends JFrame {
@@ -27,17 +37,26 @@ public class PositionSalaryManagement_View extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private  DefaultTableModel tableModel; 
-
-    public PositionSalaryManagement_View() {
-    	String[] columnNames = {
-                "ID", "Tên chức vụ", "Lương(tr)"
-            };
-    	tableModel = new DefaultTableModel(columnNames, 0);
-    	this.init();
-		setVisible(true);
+    ArrayList<Position> pos;
+    public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PositionSalaryManagement_View frame = new PositionSalaryManagement_View();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
-    public void init() {
+    public PositionSalaryManagement_View() {
+    	loadPositionData();
+    	String[] columnNames = {
+	            "ID", "Chức vụ","Lương"
+	        };
+	    this.tableModel = new DefaultTableModel(columnNames, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();
@@ -350,7 +369,7 @@ public class PositionSalaryManagement_View extends JFrame {
         
         // Add the JScrollPane to panel_2
         panel_3.add(scrollPane, BorderLayout.CENTER);
-        loadAccountData();
+        loadPosition();
         
         JPanel panel_4 = new JPanel();
         panel_4.setBackground(new Color(224, 255, 255));
@@ -358,18 +377,18 @@ public class PositionSalaryManagement_View extends JFrame {
         contentPane.add(panel_4);
     }
     
-    public void loadAccountData() {
-        String filePath = "D:\\Position.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] accountData = line.split(",");
-                if (accountData.length == 3) {
-					tableModel.addRow(accountData);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void loadPositionData() {
+        this.pos = DatabaseConnection.Pos("SELECT * from Position");
     }
+    private void loadPosition()
+   	{
+    	for (int i = 0; i < this.pos.size(); i++) {
+	        Position pos = this.pos.get(i);
+	        this.tableModel.addRow(new Object[]{
+	            Utils.decrypt(String.valueOf(pos.getPositionID())),
+	            pos.getPositionName(),
+	            pos.getPositionSalary()
+	        });
+	    }
+   	}
 }

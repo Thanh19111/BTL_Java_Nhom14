@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import Controller.AddDepartmentListener;
 import Data.DatabaseConnection;
@@ -278,10 +279,6 @@ public class DepartmentManagement_Add extends JFrame {
             addressTextField.setText("");
             phoneNumberTextField.setText("");
         	loadDepartmentData();
-        }
-        else if(res == 3)
-        {
-        	JOptionPane.showMessageDialog(this, "ID phải là số nguyên", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 	//////////////////////////////////////////////////////////////////////

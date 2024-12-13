@@ -13,6 +13,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -30,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
 import Controller.AccountViewListener;
 import Data.DatabaseConnection;
 import Model.Account;
+import Model.Department;
 import Utils.Utils;
 
 public class AccountManagement_ViewMain extends JFrame {
@@ -79,14 +83,14 @@ public class AccountManagement_ViewMain extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Users\\Downloads\\lg.png";
+        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(10, 10, 132, 50);
+        logo.setBounds(36, 5, 95, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");
@@ -511,7 +515,7 @@ public class AccountManagement_ViewMain extends JFrame {
 	    boolean accountFound = false;
 	    for(Account acc : this.arr)
 	    {
-	    	if(acc.getUsername().equals(Utils.encrypt(searchUsername)))
+	    	if(acc.getUsername().equals(searchUsername))
 	    	{
 	    		accountFound = true;
             	AccountManagement_Search searchResultFrame = new AccountManagement_Search(acc.getUsername(), acc.getPassword());

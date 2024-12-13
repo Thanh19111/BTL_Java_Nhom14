@@ -5,26 +5,29 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import Data.DatabaseConnection;
+import Utils.Utils;
 
 public class Employee {
 
     private int employeeId;
     private String employeeName;
-    private Date birthDate;
+    private String birthDate;
     private String gender;
     private String hometown;
     private String phoneNumber;
-    private Date hireDate;
+    private String hireDate;
     private double salary;
     private float overtimeHours;
-    private Position employeePosition;
-    private Department employeeDepartment;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    private int employeePosition;
+    private int employeeDepartment;
 
     public Employee() {}
 
-    public Employee(int employeeId, String employeeName, Date birthDate, String gender, String hometown, String phoneNumber, Date hireDate, float overtimeHours, Position employeePosition, Department employeeDepartment) {
+    public Employee(int employeeId, String employeeName, String birthDate, String gender, String hometown, String phoneNumber, String hireDate, float overtimeHours, int employeePosition, int employeeDepartment) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
         this.birthDate = birthDate;
@@ -35,7 +38,7 @@ public class Employee {
         this.overtimeHours = overtimeHours;
         this.employeePosition = employeePosition;
         this.employeeDepartment = employeeDepartment;
-        this.salary = salaryCalculation();
+//        this.salary = salaryCalculation();
     }
 
     public int getEmployeeId() {
@@ -54,11 +57,11 @@ public class Employee {
         this.employeeName = employeeName;
     }
 
-    public Date getBirthDate() {
+    public String getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(String birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -86,11 +89,11 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getHireDate() {
+    public String getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(Date hireDate) {
+    public void setHireDate(String hireDate) {
         this.hireDate = hireDate;
     }
 
@@ -110,137 +113,88 @@ public class Employee {
         this.overtimeHours = overtimeHours;
     }
 
-    public Position getEmployeePosition() {
+    public int getEmployeePosition() {
         return employeePosition;
     }
 
-    public void setEmployeePosition(Position employeePosition) {
+    public void setEmployeePosition(int employeePosition) {
         this.employeePosition = employeePosition;
     }
 
-    public Department getEmployeeDepartment() {
+    public int getEmployeeDepartment() {
         return employeeDepartment;
     }
 
-    public void setEmployeeDepartment(Department employeeDepartment) {
+    public void setEmployeeDepartment(int employeeDepartment) {
         this.employeeDepartment = employeeDepartment;
     }
 
-    public double salaryCalculation() {
-        return employeePosition.getPositionSalary() + overtimeHours * 0.1;
-    }
 
-    @Override
-    public String toString() {
-        return employeeId + "," +
-               employeeName + "," +
-               DATE_FORMAT.format(birthDate) + "," +
-               gender + "," +
-               hometown + "," +
-               phoneNumber + "," +
-               DATE_FORMAT.format(hireDate) + "," +
-               salary + "," +
-               overtimeHours + "," +
-               employeePosition.getPositionName() + "," +
-               employeeDepartment.getDepartmentName();
+    public boolean positionIDCheck(int positionID) {
+    
+        ArrayList<Position> arr = DatabaseConnection.PositionQuery("select * from Position");
+        //System.out.print(arr);
+        for (Position position : arr) {
+			if(position.getPositionID() == positionID)
+			{
+				return true;
+			}
+		}
+        return false;
+    	
     }
     
-    public Position positionNameCheck(String positionName) {
-    	final String FILE_NAME1 = "D:\\Position.txt";
-    	Position employeePosition;
-    	try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME1))) {
-            String line;
-			while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                	if (parts[1].equals(positionName)) {
-                		int positionID = Integer.parseInt(parts[0]);
-                        String positionName1 = parts[1];
-                        double positionSalary = Double.parseDouble(parts[2]);
-                        employeePosition = new Position(positionID, positionName1, positionSalary);
-                        return employeePosition;
-                	}
-                }
-            }
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    	return employeePosition = new Position();
+    public boolean departmentIDCheck(int department) {
+        ArrayList<Department> arr = DatabaseConnection.DepartmentQuery("select * from Department");
+        //System.out.print(arr);
+        for (Department deparment : arr) {
+			if(deparment.getDepartmentID() == department)
+			{
+				return true;
+			}
+		}
+        return false;
     }
     
-    public Department departmentNameCheck(String departmentName) {
-    	final String FILE_NAME2 = "D:\\Department.txt";
-    	Department employeeDepartment;
-    	try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME2))) {
-            String line;
-			while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 4) {
-                	if (parts[1].equals(departmentName)) {
-                		int departmentID = Integer.parseInt(parts[0]);
-                        String departmentName1 = parts[1];
-                        String departmentAddress = parts[2];
-                        String departmentPhoneNumber = parts[3];
-                        employeeDepartment = new Department(departmentID, departmentName1, departmentAddress, departmentPhoneNumber);
-                        return employeeDepartment;
-                	}
-                }
-            }
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    	return employeeDepartment = new Department();
-    }
-    
-    public int input(String id, String name, String bỉrthDate, String gender, String homeTown, 
-    					String phoneNumber, String hỉreDate, String overTimeHour, String positionName, String departmentName) {
+    public int input(String id, String name, String birthDate, String gender, String homeTown, 
+    					String phoneNumber, String hỉreDate1, String salary, String overTimeHour, String positionID, String departmentID)
+    {
     	
     	this.setEmployeeId(Integer.parseInt(id));
     	
 		this.setEmployeeName(name);
+		this.setSalary(Double.parseDouble(salary));
 		
-        String birthDateString = bỉrthDate;
-    	try {
-            Date birthDate2 = DATE_FORMAT.parse(birthDateString);
-            this.setBirthDate(birthDate2);
-        } 
-    	catch (ParseException e) {
-            System.out.println("Ngay sinh khong hop le.");
-            return 1;
-        }    
 		
+
+		
+		this.setBirthDate(birthDate);
 		this.setGender(gender);
 		
 		this.setHometown(homeTown);
 		
 		this.setPhoneNumber(phoneNumber);
 		
-        String hireDateString = hỉreDate;
-    	try {
-            Date hireDate2 = DATE_FORMAT.parse(hireDateString);
-            this.setHireDate(hireDate2);
-        } 
-    	catch (ParseException e) {
-            System.out.println("Ngay vao lam khong hop le.");
-            return 2;
-        }
-    	
-    	float overTimeHour2 = Float.parseFloat(overTimeHour);
-		this.setOvertimeHours(overTimeHour2);
 		
-		Position check = positionNameCheck(positionName);
-		if (check.getPositionID() == 0) {
+
+		
+		
+		this.setHireDate(hỉreDate1);
+		
+		this.setOvertimeHours(Float.parseFloat(overTimeHour));
+		
+		Boolean check = positionIDCheck(Integer.parseInt(positionID));
+		
+		if (check == false) {
 			return 3;
 		}
-		else this.setEmployeePosition(check);
+		else this.setEmployeePosition(Integer.parseInt(positionID));
 		
-		Department check1 = departmentNameCheck(departmentName);
-		if (check1.getDepartmentID() == 0) {
+		Boolean check1 = departmentIDCheck(Integer.parseInt(departmentID));
+		if (check1 == false) {
 			return 4;
 		}
-		else this.setEmployeeDepartment(check1);
+		else this.setEmployeeDepartment(Integer.parseInt(departmentID));
 		
 		return 5;
     }

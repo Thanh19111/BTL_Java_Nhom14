@@ -115,6 +115,7 @@ public class DepartmentManagement_Edit extends JFrame {
         phoneNumberTextField.setBounds(65, 310, 285, 30);
         panel_2.add(phoneNumberTextField);
         
+        
         confirmButton = new JButton("Xác nhận");
         ActionListener ac = new EditDepartmentListener(this);
         confirmButton.addActionListener(ac);
@@ -280,9 +281,6 @@ public class DepartmentManagement_Edit extends JFrame {
 		}
 		else if (res == 2) {
 			JOptionPane.showMessageDialog(this, "ID không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-		}else if(res == 3)
-		{
-			JOptionPane.showMessageDialog(this, "ID không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		}
     }
 

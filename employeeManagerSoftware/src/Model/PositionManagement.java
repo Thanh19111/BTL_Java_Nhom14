@@ -1,99 +1,85 @@
 package Model;
+import java.util.*;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
+import Data.DatabaseConnection;
 
 public class PositionManagement {
 	
-	 private static final String FILE_NAME = "D:\\Position.txt";
-     private ArrayList<Position> positions;
-    
+	 private ArrayList<Position> positions = new ArrayList<Position>();
+
     public PositionManagement(){
-        this.positions = new ArrayList<Position>();
-    }
-    
-    public void loadFromFile() {
-		
+       loadPositions();
+    }  
+    public void loadPositions() {
     	positions.clear();
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                	
-                	int positionID = Integer.parseInt(parts[0]);
-                    String positionName = parts[1];
-                    double positionSalary = Double.parseDouble(parts[2]);
-                    
-                    Position position = new Position(positionID, positionName, positionSalary);
-                    positions.add(position);
-                }
-            }
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        positions = DatabaseConnection.Pos("select * from Position");
     }
     
-    public void saveToFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
-            for (Position position : positions) {
-                writer.write(position.toString());
-                writer.newLine();
-            }
-        } 
-        catch (IOException e) {
-            e.printStackTrace();
+    public int addPosition(int id, String pos, Double salar) {
+    	loadPositions();
+        if (positions == null) {
+            positions = new ArrayList<>();
+            
         }
+     
+        for (Position pq : positions) {
+            if (pq.getPositionID() == id) {
+                System.out.println("ID đã tồn tại.");
+                return 1; 
+            }
+        }
+
+        String sql = "EXECUTE AddPosition " + id + ", '" + pos + "', " + salar;
+        DatabaseConnection.PositionExec(sql);
+        System.out.println("Thêm thành công.");
+        return 2;
     }
-    
-    public int addPosition(Position x){
-    	loadFromFile();
-    	for (Position position : positions) {
-    		if (position.getPositionID() == x.getPositionID()) {
+    public int removePosition(String id){
+    	ArrayList<Position> arrayList = DatabaseConnection.PositionQuery("select * from Position");
+    	for (Position ps : arrayList)
+    	{
+    		if(ps.getPositionID() == Integer.parseInt(id))
+    		{
+    		    String sql = "EXECUTE DeletePosition "+id+"";
+    			 DatabaseConnection.PositionExec(sql);
+    			System.out.print("Xóa tài khoản thành công");
     			return 1;
     		}
     	}
-        this.positions.add(x);
-        saveToFile();
-        return 2;
-    }
+    	return 2;
+    	
+    	}
+
     
-    public int removePosition(String id){
-    	this.loadFromFile();
-    	for (Position position : positions) {
-    		if (position.getPositionID() == Integer.parseInt(id)) {
-    			positions.remove(position);
-    			this.saveToFile();
+    public int editPosition(String id, String positionName, String salary) {
+    	
+    	ArrayList<Position> arrayList = DatabaseConnection.PositionQuery("select * from Position");
+    	for (Position ps : arrayList)
+    	{
+    		if(ps.getPositionID() == Integer.parseInt(id))
+    		{
+    			String sql = "EXECUTE UpdatePosition " + id +","+positionName+","+salary+"";
+    			DatabaseConnection.PositionExec(sql);
+    			System.out.print("Sửa tài khoản thành công");
     			return 1;
     		}
     	}
     	return 2;
     }
     
-    public int editPosition(String id, String positionName, String salary) {
-    	this.loadFromFile();
-        for(Position position : positions){
-            if(position.getPositionID() == Integer.parseInt(id)){
-            	position.setPositionName(positionName);
-            	position.setPositionSalary(Double.parseDouble(salary));
-            	this.saveToFile();
-                return 1;
+    public void displayPosition(){
+    	loadPositions();
+    	if (positions.isEmpty())
+    	{
+    		System.out.println("Không có tài khoản nào trong hệ thống.");
+    	} else {
+            System.out.println("Danh sách tài khoản:");
+            for (Position ps : positions) {
+                System.out.println(ps.toString());
             }
         }
-        return 2;
     }
-    
-    public void displayPosition(){
-    	this.loadFromFile();
-    	if (positions == null) System.out.println("Danh sach chuc vu rong");
-        for(Position position : positions){
-            System.out.println(position.toString());
-        }
-    }
+    public ArrayList<Position> getPositions() {
+        return DatabaseConnection.Pos("SELECT * from Position");
+}
 }

@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import Controller.DepartmentViewListener;
 import Data.DatabaseConnection;
 import Model.Department;
+import Model.DepartmentManagement;
 
 public class DepartmentManagement_ViewMain extends JFrame {
 
@@ -79,14 +81,14 @@ public class DepartmentManagement_ViewMain extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Users\\Downloads\\lg.png";
+        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(20, 4, 117, 50);
+        logo.setBounds(36, 5, 95, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");
@@ -507,27 +509,22 @@ public class DepartmentManagement_ViewMain extends JFrame {
     	    return;
     	}
 
-
+    	int find = Integer.parseInt(id);
+    	
 	    boolean accountFound = false;
-	    String filePath = "D:\\Department.txt";
-
-	    try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-	        String line;
-	        while ((line = br.readLine()) != null) {
-	            String[] departmentData = line.split(",");
-	            if (departmentData.length == 4 && departmentData[0].equals(id)) {
-	            	accountFound = true;
-	            	
-	            	DepartmentManagement_Search searchResultFrame = new DepartmentManagement_Search(departmentData[0], 
-	            			departmentData[1], departmentData[2], departmentData[3]);
-	                searchResultFrame.setVisible(true);
-	                this.dispose();
-	                break;
-	            }
-	        }
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
+	    ArrayList<Department> arrayList = DatabaseConnection.DepartmentQuery("Select * from Department");
+	    
+	    for (Department department : arrayList) {
+			if(department.getDepartmentID() == find)
+			{
+				accountFound = true;
+            	
+            	DepartmentManagement_Search searchResultFrame = new DepartmentManagement_Search(department.getDepartmentID(), 
+            			department.getDepartmentName(), department.getDepartmentAddress(), department.getDepartmentPhoneNumber());
+                searchResultFrame.setVisible(true);
+                this.dispose();
+			}
+		}
 
 	    if (!accountFound) {
 	        JOptionPane.showMessageDialog(this, "ID không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);

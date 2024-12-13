@@ -72,7 +72,7 @@ public class HomePage extends JFrame {
         });
         employeeButton_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
         employeeButton_2.setBounds(41, 64, 380, 130);
-        ImageIcon icon = new ImageIcon("D:\\Users\\Downloads\\cn.png");
+        ImageIcon icon = new ImageIcon("D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\Employee_Icon.png");
         Image img = icon.getImage();
         Image scaledImg = img.getScaledInstance(113, 133, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
@@ -111,7 +111,7 @@ public class HomePage extends JFrame {
         });
         departmentButton_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
         departmentButton_2.setBounds(41, 246, 380, 130);
-        ImageIcon icon1 = new ImageIcon("D:\\Users\\Downloads\\pb.png");
+        ImageIcon icon1 = new ImageIcon("D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\Department_Icon.png");
         Image img1 = icon1.getImage();
         Image scaledImg1 = img1.getScaledInstance(105, 70, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon1 = new ImageIcon(scaledImg1);
@@ -150,7 +150,7 @@ public class HomePage extends JFrame {
         	}
         });
         reportButton_2.setBounds(41, 423, 380, 130);
-        ImageIcon icon3 = new ImageIcon("D:\\Users\\Downloads\\tk.jpg");
+        ImageIcon icon3 = new ImageIcon("D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\Report_Icon.png");
         Image img3 = icon3.getImage();
         Image scaledImg3 = img3.getScaledInstance(80, 70, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon3 = new ImageIcon(scaledImg3);
@@ -189,7 +189,7 @@ public class HomePage extends JFrame {
         });
         positionButton_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
         positionButton_2.setBounds(477, 64, 380, 130);
-        ImageIcon icon2 = new ImageIcon("D:\\Users\\Downloads\\cv.png");
+        ImageIcon icon2 = new ImageIcon("D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\Position_Icon.png");
         Image img2 = icon2.getImage();
         Image scaledImg2 = img2.getScaledInstance(85, 75, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon2 = new ImageIcon(scaledImg2);
@@ -228,7 +228,7 @@ public class HomePage extends JFrame {
         });
         salaryButton_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
         salaryButton_2.setBounds(477, 246, 380, 130);
-        ImageIcon icon4 = new ImageIcon("D:\\Users\\Downloads\\luong.jpg");
+        ImageIcon icon4 = new ImageIcon("D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\Salary_Icon.png");
         Image img4 = icon4.getImage();
         Image scaledImg4 = img4.getScaledInstance(72, 80, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon4 = new ImageIcon(scaledImg4);
@@ -263,7 +263,7 @@ public class HomePage extends JFrame {
         accountButton_2.setBackground(new Color(255, 255, 255));
         accountButton_2.setFont(new Font("Segoe UI", Font.BOLD, 20));
         accountButton_2.setBounds(477, 423, 380, 130);
-        ImageIcon icon5 = new ImageIcon("D:\\Users\\Downloads\\acc.png");
+        ImageIcon icon5 = new ImageIcon("D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\Account_Icon.png");
         Image img5 = icon5.getImage();
         Image scaledImg5 = img5.getScaledInstance(85, 70, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon5 = new ImageIcon(scaledImg5);
@@ -280,14 +280,14 @@ public class HomePage extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Users\\Downloads\\lg.png";
+        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(8, 5, 150, 50);
+        logo.setBounds(36, 5, 95, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");

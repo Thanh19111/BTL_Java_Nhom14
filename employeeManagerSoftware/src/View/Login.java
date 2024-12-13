@@ -45,14 +45,14 @@ public class Login extends JFrame {
 		panel_1.setBounds(0, 0, 402, 563);
 		contentPane.add(panel_1);
 		
-		String logoPath = "D:\\Users\\Downloads\\lg.png";
+		String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
                 ImageIcon logoIcon = new ImageIcon(logoPath);
                 Image logoImage = logoIcon.getImage();
                 Image scaledLogoImage = logoImage.getScaledInstance(340, 140, Image.SCALE_SMOOTH);
                 ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
                 panel_1.setLayout(null);
                 JLabel logo = new JLabel(scaledLogoIcon);
-                logo.setBounds(10, 146, 352, 332);
+                logo.setBounds(44, 198, 303, 144);
                 panel_1.add(logo);
 
 		JPanel panel_2 = new JPanel();

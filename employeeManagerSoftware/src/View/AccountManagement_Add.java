@@ -63,7 +63,7 @@ public class AccountManagement_Add extends JFrame {
 	public AccountManagement_Add() {
 		/////////////////////////////////////////////////
 		String[] columnNames = {
-                "Tài khoản", "Mật khẩu"
+				"Tài khoản", "Mật khẩu"
             };
 		
 		

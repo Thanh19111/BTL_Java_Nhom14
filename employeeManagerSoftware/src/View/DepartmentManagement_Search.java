@@ -25,7 +25,7 @@ public class DepartmentManagement_Search extends JFrame {
 	private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private static String departmentName;
-	private static String id;
+	private static int id;
 	private static String address;
 	private static String phoneNumber;
 	
@@ -49,7 +49,7 @@ public class DepartmentManagement_Search extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DepartmentManagement_Search(String id, String departmentName, String address, String phoneNumber) {
+	public DepartmentManagement_Search(int id, String departmentName, String address, String phoneNumber) {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
