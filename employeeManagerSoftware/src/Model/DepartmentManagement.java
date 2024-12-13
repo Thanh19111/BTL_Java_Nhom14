@@ -1,11 +1,8 @@
 package Model;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import Data.DatabaseConnection;
+import Utils.Utils;
 
 public class DepartmentManagement {
 	
@@ -39,8 +36,15 @@ public class DepartmentManagement {
 	
 	public int removeDepartment(String id) {
 		this.loadFromDatabase();
+		
+		Integer integer = Utils.parseIntegerOrNull(id);
+		
+		if(integer == null)
+		{
+			return 3;
+		}
 		for (Department department : departments) {
-			if (department.getDepartmentID() == Integer.parseInt(id)) {
+			if (department.getDepartmentID() == integer) {
 	
 				////////////////////////////////////////////////////////
 				String sql = "EXECUTE DeleteDepartment " + id;
@@ -54,8 +58,14 @@ public class DepartmentManagement {
 	
 	public int editDepartment(String id, String name, String address, String phoneNumber) {
 		this.loadFromDatabase();
+		Integer in = Utils.parseIntegerOrNull(id);
+		if(in==null)
+		{
+			return 3;
+		}
+		
 		for (Department department : departments) {
-			if (department.getDepartmentID() == Integer.parseInt(id)) {
+			if (department.getDepartmentID() == in) {
 				//////////////////////////////////////////////////////////////////////////
 				String sql = "EXECUTE UpdateDepartment " + id + ", N'" + name +"'" + ", N'" + address +"'" + ", N'" + phoneNumber + "'";
 				DatabaseConnection.DeparmentExecProc(sql);

@@ -31,4 +31,12 @@ public class Utils {
         }
         return plainText.toString();
     }
+	public static Integer parseIntegerOrNull(String input) {
+	    try {
+	        return Integer.parseInt(input);
+	    } catch (NumberFormatException e) {
+	        return null;
+	    }
+	}
+
 }

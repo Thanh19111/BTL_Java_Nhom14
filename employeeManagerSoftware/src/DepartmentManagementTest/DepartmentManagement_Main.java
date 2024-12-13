@@ -2,6 +2,7 @@ package DepartmentManagementTest;
 
 import Model.Department;
 import Model.DepartmentManagement;
+import Utils.Utils;
 
 public class DepartmentManagement_Main {
 	
@@ -12,9 +13,15 @@ public class DepartmentManagement_Main {
 		}	
 			
 		public int addDepartment(String id, String positionName, String address, String phoneNumber) {
-				Department d = new Department(Integer.parseInt(id), positionName, address, phoneNumber);
+				Integer s = Utils.parseIntegerOrNull(id);
+				if(s!=null)
+				{
+					Department d = new Department(Integer.parseInt(id), positionName, address, phoneNumber);
+					return dm.addDepartment(d);
+				}
+				return 3;
 				
-				return dm.addDepartment(d);
+				
 			}
 			
 		public int removeDepartment(String id) {

@@ -47,6 +47,8 @@ public class EmployeeManagement_AddEmployee extends JFrame {
 	}
     
     public void init() {
+    	
+    	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);
         contentPane = new JPanel();
@@ -265,6 +267,8 @@ public class EmployeeManagement_AddEmployee extends JFrame {
         themMoiNhanVienText.setFont(new Font("Segoe UI", Font.BOLD, 20));
         themMoiNhanVienText.setBounds(425, 20, 238, 53);
         panel_1.add(themMoiNhanVienText);
+        
+        
         
     }
     

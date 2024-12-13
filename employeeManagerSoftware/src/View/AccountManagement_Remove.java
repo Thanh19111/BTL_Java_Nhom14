@@ -215,7 +215,8 @@ public class AccountManagement_Remove extends JFrame {
     		loadAccountData();
     		this.usernameTextField.setText("");
     	}
-    	else if (res == 3) JOptionPane.showMessageDialog(this, "Vui lòng nhập  hết các trường dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    	else if(res == 3) { JOptionPane.showMessageDialog(this, "Vui lòng nhập  hết các trường dữ liệu!", "Lỗi", JOptionPane.ERROR_MESSAGE);}
+   
     }
 	
 	private void loadAccountData()

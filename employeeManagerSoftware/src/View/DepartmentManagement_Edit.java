@@ -280,6 +280,9 @@ public class DepartmentManagement_Edit extends JFrame {
 		}
 		else if (res == 2) {
 			JOptionPane.showMessageDialog(this, "ID không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}else if(res == 3)
+		{
+			JOptionPane.showMessageDialog(this, "ID không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
 		}
     }
 
