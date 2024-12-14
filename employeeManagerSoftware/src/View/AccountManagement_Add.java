@@ -61,6 +61,7 @@ public class AccountManagement_Add extends JFrame {
 	 * Create the frame.
 	 */
 	public AccountManagement_Add() {
+		setTitle("Quản Lý Nhân Viên");
 		/////////////////////////////////////////////////
 		String[] columnNames = {
 				"Tài khoản", "Mật khẩu"
@@ -152,7 +153,7 @@ public class AccountManagement_Add extends JFrame {
         panel_2.add(cancelButton);
         
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(0, 57, 0));
+        panel_1.setBackground(new Color(0, 0, 0));
         panel_1.setBounds(0, 0, 1062, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);

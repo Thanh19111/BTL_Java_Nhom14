@@ -52,6 +52,7 @@ public class AccountManagement_Search extends JFrame {
 	 * Create the frame.
 	 */
 	public AccountManagement_Search(String username, String password) {
+		setTitle("Quản Lý Nhân Viên");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);

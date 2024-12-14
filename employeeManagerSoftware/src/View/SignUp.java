@@ -27,6 +27,7 @@ public class SignUp extends JFrame {
 	private AccountManagement_Main amm;
 
 	public SignUp() {
+		setTitle("Quản Lý Nhân Viên");
 		amm = new AccountManagement_Main();
 		this.init();
 		setVisible(true);
@@ -46,7 +47,7 @@ public class SignUp extends JFrame {
 		panel_1.setBounds(0, 0, 402, 563);
 		contentPane.add(panel_1);
 		
-		String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+		String logoPath = "D:\\Users\\Downloads\\lg.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(340, 140, Image.SCALE_SMOOTH);
@@ -54,7 +55,7 @@ public class SignUp extends JFrame {
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
         logo.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        logo.setBounds(44, 198, 303, 144);
+        logo.setBounds(10, 198, 382, 144);
         panel_1.add(logo);
 		
 		JPanel panel_2 = new JPanel();
@@ -89,9 +90,9 @@ public class SignUp extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		loginButton.setBackground(new Color(71, 167, 206));
+		loginButton.setBackground(new Color(192, 192, 192));
 		loginButton.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		loginButton.setForeground(new Color(255, 255, 255));
+		loginButton.setForeground(new Color(0, 128, 255));
 		
 		usernameTextField = new JTextField();
 		usernameTextField.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -109,9 +110,9 @@ public class SignUp extends JFrame {
 		//chuyển sang controller khi nhân nút signup
 		ActionListener ac = new SignUpListener(this);
 		signUpButton.addActionListener(ac);
-		signUpButton.setForeground(Color.WHITE);
+		signUpButton.setForeground(new Color(0, 128, 255));
 		signUpButton.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		signUpButton.setBackground(new Color(71, 167, 206));
+		signUpButton.setBackground(new Color(192, 192, 192));
 		signUpButton.setBounds(111, 385, 117, 38);
 		panel_2.add(signUpButton);
 		

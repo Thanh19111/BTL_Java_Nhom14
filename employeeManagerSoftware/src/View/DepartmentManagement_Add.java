@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -64,6 +66,7 @@ public class DepartmentManagement_Add extends JFrame {
 	 * Create the frame.
 	 */
 	public DepartmentManagement_Add() {
+		setTitle("Quản Lý Nhân Viên");
 		
 		String[] columnNames = {
                 "ID", "Tên phòng ban", "Địa chỉ", "Số điện thoại"
@@ -211,7 +214,7 @@ public class DepartmentManagement_Add extends JFrame {
         ////////////////////////////////////////////////////////////////////////
        
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(0, 57, 0));
+        panel_1.setBackground(new Color(0, 0, 0));
         panel_1.setBounds(0, 0, 1062, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);
@@ -283,6 +286,7 @@ public class DepartmentManagement_Add extends JFrame {
     }
 	//////////////////////////////////////////////////////////////////////
 	public void loadDepartmentData() {
+		
 		tableModel.setRowCount(0);
 	    ArrayList<Department> arrayList = DatabaseConnection.DepartmentQuery("select * from Department");
 	    for (int i = 0; i < arrayList.size(); i++) {

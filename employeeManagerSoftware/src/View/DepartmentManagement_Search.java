@@ -50,6 +50,7 @@ public class DepartmentManagement_Search extends JFrame {
 	 * Create the frame.
 	 */
 	public DepartmentManagement_Search(int id, String departmentName, String address, String phoneNumber) {
+		setTitle("Quản Lý Nhân Viên");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 1076, 600);

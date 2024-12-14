@@ -25,7 +25,8 @@ public class Login extends JFrame {
 	private JTextField passwordTextfield;
 	private AccountManagement_Main amm;
 	
-	public Login() {		//Hàm này lúc đầu là hàm main
+	public Login() {
+		setTitle("Quản Lý Nhân Viên");		//Hàm này lúc đầu là hàm main
 		this.amm = new AccountManagement_Main();
 		this.init();
 		setVisible(true);
@@ -41,18 +42,18 @@ public class Login extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(71, 167, 206));
+		panel_1.setBackground(new Color(0, 128, 255));
 		panel_1.setBounds(0, 0, 402, 563);
 		contentPane.add(panel_1);
 		
-		String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+		String logoPath = "D:\\Users\\Downloads\\lg.png";
                 ImageIcon logoIcon = new ImageIcon(logoPath);
                 Image logoImage = logoIcon.getImage();
                 Image scaledLogoImage = logoImage.getScaledInstance(340, 140, Image.SCALE_SMOOTH);
                 ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
                 panel_1.setLayout(null);
                 JLabel logo = new JLabel(scaledLogoIcon);
-                logo.setBounds(44, 198, 303, 144);
+                logo.setBounds(0, 198, 402, 144);
                 panel_1.add(logo);
 
 		JPanel panel_2 = new JPanel();
@@ -62,7 +63,8 @@ public class Login extends JFrame {
 		panel_2.setLayout(null);
 		
 		JLabel loginText = new JLabel("LOGIN");
-		loginText.setForeground(new Color(71, 167, 206));
+		loginText.setBackground(new Color(0, 128, 255));
+		loginText.setForeground(new Color(0, 128, 255));
 		loginText.setFont(new Font("Segoe UI", Font.BOLD, 45));
 		loginText.setBounds(175, 63, 146, 83);
 		panel_2.add(loginText);
@@ -88,9 +90,9 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		signUpButton.setBackground(new Color(71, 167, 206));
+		signUpButton.setBackground(new Color(192, 192, 192));
 		signUpButton.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		signUpButton.setForeground(new Color(255, 255, 255));
+		signUpButton.setForeground(new Color(0, 128, 255));
 		
 		usernameTextfield = new JTextField();
 		usernameTextfield.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -110,9 +112,9 @@ public class Login extends JFrame {
 		ActionListener ac = new LoginListener(this);
 		loginButton.addActionListener(ac);
 		
-		loginButton.setForeground(Color.WHITE);
+		loginButton.setForeground(new Color(0, 128, 255));
 		loginButton.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		loginButton.setBackground(new Color(71, 167, 206));
+		loginButton.setBackground(new Color(192, 192, 192));
 		loginButton.setBounds(111, 385, 117, 38);
 		panel_2.add(loginButton);
 		

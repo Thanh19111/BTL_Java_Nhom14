@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import Data.DatabaseConnection;
 
@@ -21,13 +22,7 @@ public class PositionSalaryManagement {
 	    	positionList.clear();
 	    	positionList = DatabaseConnection.Pos("select * from Position");
 	    }
-	    
-	 
-       
-    
-	 
-	
-	 
+	   
     public void displayPositions() {
     	loadPositions();
         System.out.printf("%-5s %-20s %-15s %n", "ID", "Name", "Salary");
@@ -37,14 +32,13 @@ public class PositionSalaryManagement {
     }
     
     public int positionSalaryEdit(String id, String salary) {
-    	loadPositions();
-        for (Position x : positionList) {
-            if (x.getPositionID() == Integer.parseInt(id)) {
-            	String sql = "EXECUTE UpdateSal " + id +","+salary+"";
-    			DatabaseConnection.PositionExec(sql);
-    			System.out.print("Sửa tài khoản thành công");
-                return 1;
-            }
+    	ArrayList<Employee> arrayList = DatabaseConnection.EmployeeQuery("Select * from Employee Where employeeId = " + id);
+    	if(!arrayList.isEmpty())
+    	{
+    		String sql = "EXECUTE EditSalary " + id +","+salary+"";
+			DatabaseConnection.PositionExec(sql);
+			System.out.print("Cập nhật thành công");
+            return 1;
         }
         return 2;
     }

@@ -71,6 +71,7 @@ public class AccountManagement_Edit extends JFrame {
 	 * Create the frame.
 	 */
 	public AccountManagement_Edit() {
+		setTitle("Quản Lý Nhân Viên");
 		String[] columnNames = {
                 "Tài khoản", "Mật khẩu"
             };
@@ -157,7 +158,7 @@ public class AccountManagement_Edit extends JFrame {
         panel_2.add(newPasswordTextField);
         
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(0, 57, 0));
+        panel_1.setBackground(new Color(0, 0, 0));
         panel_1.setBounds(0, 0, 1062, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);

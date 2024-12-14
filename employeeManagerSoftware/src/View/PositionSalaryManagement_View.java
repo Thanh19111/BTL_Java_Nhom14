@@ -13,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 
 import Data.DatabaseConnection;
 import Model.Account;
+import Model.Department;
+import Model.Employee;
 import Model.Position;
 import Utils.Utils;
 
@@ -29,15 +31,17 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-
+import java.sql.Connection;
 import java.awt.Color;
-
+import java.sql.ResultSet;
+import java.sql.SQLException;
 public class PositionSalaryManagement_View extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
     private  DefaultTableModel tableModel; 
     ArrayList<Position> pos;
+    ArrayList<Employee> employees;
     public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -52,13 +56,17 @@ public class PositionSalaryManagement_View extends JFrame {
 	}
 
     public PositionSalaryManagement_View() {
+    	setTitle("Quản Lý Nhân Viên");
     	loadPositionData();
+    	loadEmployeeData();
+    	
     	String[] columnNames = {
-	            "ID", "Chức vụ","Lương"
-	        };
+                "ID", "Tên", "Ngày sinh","Giới tính","Địa chỉ", "Số điện thoại","Ngày làm việc", "Hệ số lương", "Lương cơ bản",
+                "Tăng ca(h)", "Chức vụ", "Phòng ban","Lương"
+    	};
 	    this.tableModel = new DefaultTableModel(columnNames, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1076, 600);
+        setBounds(100, 100, 1148, 615);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -70,14 +78,14 @@ public class PositionSalaryManagement_View extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+        String logoPath = "D:\\Users\\Downloads\\lg.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(36, 5, 95, 50);
+        logo.setBounds(8, 5, 150, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");
@@ -291,14 +299,14 @@ public class PositionSalaryManagement_View extends JFrame {
         
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(new Color(255, 255, 255));
-        panel_2.setBounds(177, 0, 885, 54);
+        panel_2.setBounds(177, 0, 957, 54);
         contentPane.add(panel_2);
         panel_2.setLayout(null);
         
         JButton editEmployeeButton = new JButton("Sửa\r\n");
         editEmployeeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	PositionSalaryManagement_EditPositionSalary newFrame = new PositionSalaryManagement_EditPositionSalary();
+            	PositionSalaryManagement_EditEmployeeSalary newFrame = new PositionSalaryManagement_EditEmployeeSalary();
                 newFrame.setVisible(true);
                 dispose();
             }
@@ -357,7 +365,7 @@ public class PositionSalaryManagement_View extends JFrame {
         
         JPanel panel_3 = new JPanel();
         panel_3.setBackground(new Color(255, 255, 255));
-        panel_3.setBounds(177, 64, 885, 498);
+        panel_3.setBounds(177, 66, 947, 432);
         contentPane.add(panel_3);
         panel_3.setLayout(new BorderLayout(0, 0));
         
@@ -368,27 +376,65 @@ public class PositionSalaryManagement_View extends JFrame {
         JScrollPane scrollPane = new JScrollPane(employeeTable);
         
         // Add the JScrollPane to panel_2
-        panel_3.add(scrollPane, BorderLayout.CENTER);
+        panel_3.add(scrollPane, BorderLayout.SOUTH);
         loadPosition();
         
         JPanel panel_4 = new JPanel();
         panel_4.setBackground(new Color(224, 255, 255));
-        panel_4.setBounds(166, 0, 896, 562);
+        panel_4.setBounds(166, 0, 896, 482);
         contentPane.add(panel_4);
     }
     
     public void loadPositionData() {
         this.pos = DatabaseConnection.Pos("SELECT * from Position");
     }
+    public void loadEmployeeData()
+    {
+    	this.employees = DatabaseConnection.EmployeeQuery("select *from Employee");
+    }
+    
     private void loadPosition()
    	{
-    	for (int i = 0; i < this.pos.size(); i++) {
-	        Position pos = this.pos.get(i);
-	        this.tableModel.addRow(new Object[]{
-	            Utils.decrypt(String.valueOf(pos.getPositionID())),
-	            pos.getPositionName(),
-	            pos.getPositionSalary()
-	        });
-	    }
+    	String sqlString = "select Employee.employeeId,Employee.employeeName,Employee.birthDate,Employee.gender,Employee.hometown,Employee.phoneNumber,Employee.hireDate,Employee.salary,Position.positionSalary as LuongCB, Employee.overtimeHours,Position.positionName,Department.departmentName,Position.positionSalary * Employee.salary as Luong\r\n"
+				+ "from Employee inner join Department\r\n"
+				+ "	on Employee.departmentID = Department.departmentID\r\n"
+				+ "inner join Position\r\n"
+				+ "	on Employee.positionID = Position.positionID\r\n"
+				+ "";
+		
+
+    	ResultSet rSet = DatabaseConnection.QueryAll(sqlString);
+		
+		try {
+			while(rSet.next())
+			{
+				int id = rSet.getInt(1);
+				String name = rSet.getString(2);
+				String birth = rSet.getString(3);
+				String gender = rSet.getString(4);
+				String home = rSet.getNString(5);
+				String phone = rSet.getNString(6);
+				String hire = rSet.getString(7);
+				float hsluong = rSet.getFloat(8);
+				float luongcb = rSet.getFloat(9);
+				Float overhours = rSet.getFloat(10);
+				String pnam = rSet.getNString(11);
+				String dname = rSet.getNString(12);
+				float luong = rSet.getFloat(13);
+				
+				tableModel.addRow(
+						new Object[] {
+								id,name,birth,gender,home,phone,hire,hsluong,luongcb,overhours,pnam,dname,luong
+						}
+						);
+			}
+			
+			
+		} catch (SQLException e) {
+			System.out.print(e.getMessage());
+		}
    	}
+
+   	
+    
 }

@@ -60,6 +60,7 @@ public class DepartmentManagement_Edit extends JFrame {
 	 * Create the frame.
 	 */
 	public DepartmentManagement_Edit() {
+		setTitle("Quản Lý Nhân Viên");
 		
 		dmm = new DepartmentManagement_Main();
 		String[] columnNames = {
@@ -177,7 +178,7 @@ public class DepartmentManagement_Edit extends JFrame {
         panel_2.add(idText);
         
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(0, 57, 0));
+        panel_1.setBackground(new Color(0, 0, 0));
         panel_1.setBounds(0, 0, 1062, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);

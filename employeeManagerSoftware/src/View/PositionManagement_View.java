@@ -59,6 +59,7 @@ public class PositionManagement_View extends JFrame {
  
 
     public PositionManagement_View (){
+    	setTitle("Quản Lý Nhân Viên");
    
     	this.loadPositionMain();
     	String[] columnNames = {

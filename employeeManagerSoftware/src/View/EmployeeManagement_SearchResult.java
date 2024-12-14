@@ -27,6 +27,7 @@ public class EmployeeManagement_SearchResult extends JFrame {
     										String birthDate, String gender, String homeTown, String phoneNumber, 
     										String hireDate, double salary, float overtimeHour, int positionName, 
     										int departmentName) {
+    	setTitle("Quản Lý Nhân Viên");
 		this.init(ID, employeeName, birthDate, gender, homeTown, phoneNumber, hireDate, salary, overtimeHour, 
 					positionName, departmentName);
 		setVisible(true);

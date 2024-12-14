@@ -63,6 +63,7 @@ public class DepartmentManagement_ViewMain extends JFrame {
 	 * Create the frame.
 	 */
 	public DepartmentManagement_ViewMain() {
+		setTitle("Quản Lý Nhân Viên");
 		String[] columnNames = {
                 "ID", "Tên phòng ban", "Địa chỉ", "Số điện thoại"
             };

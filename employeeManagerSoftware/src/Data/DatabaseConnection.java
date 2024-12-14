@@ -2,7 +2,9 @@ package Data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -12,9 +14,6 @@ import Model.Employee;
 import Model.Position;
 
 public class DatabaseConnection {
-
-	
-	
 	
 	public static ArrayList<Department> DepartmentQuery(String sql)
 	{
@@ -276,5 +275,48 @@ public class DatabaseConnection {
 		    e.printStackTrace();
 		}
 	}
+	
+	
+	public static ResultSet QueryAll(String sql)
+	{
+		try {
+		    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		    String url = "jdbc:sqlserver://DESKTOP-9JGGVQQ\\SQLEXPRESS:1433;databaseName=QuanLyNhanVien;encrypt=true;trustServerCertificate=true";
+		    String username = "sa";
+		    String password = "abc123";
+		    
+		    Connection connection = DriverManager.getConnection(url, username, password);
+		    Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+			return rs;
+		} catch (Exception e) {
+		    System.out.println("Kết nối thất bại!");
+		    e.printStackTrace();
+		    return null;
+		}
+	}
+	public static int getTotalEmployee() {;
+		
+        int total = 0;
+        String query = "SELECT COUNT(employeeId) AS total_employee FROM Employee";
+        try {
+        	Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		    String url = "jdbc:sqlserver://DESKTOP-9JGGVQQ\\SQLEXPRESS:1433;databaseName=QuanLyNhanVien;encrypt=true;trustServerCertificate=true";
+		    String username = "sa";
+		    String password = "abc123";
+		    
+		    Connection connection = DriverManager.getConnection(url, username, password);
+		    Statement statement = connection.createStatement();
+
+            ResultSet resultSet = statement.executeQuery(query);
+            if (resultSet.next()) {
+                total = resultSet.getInt("total_employee");
+            }
+            
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
 	
 }

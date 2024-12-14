@@ -92,6 +92,7 @@ public class EmployeeManagement_EditEmployee extends JFrame {
 	 * Create the frame.
 	 */
     public EmployeeManagement_EditEmployee() {
+		setTitle("Quản Lý Nhân Viên");
     	this.emm = new EmployeeManagement_Main();
 		this.init();
 		setVisible(true);
@@ -325,7 +326,7 @@ public class EmployeeManagement_EditEmployee extends JFrame {
     	
         
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(25, 118, 210));
+        panel_1.setBackground(new Color(0, 0, 0));
         panel_1.setBounds(0, 0, 1336, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);

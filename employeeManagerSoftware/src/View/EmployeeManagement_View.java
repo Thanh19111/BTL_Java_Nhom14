@@ -65,6 +65,7 @@ public class EmployeeManagement_View extends JFrame {
 	 * Create the frame.
 	 */
     public EmployeeManagement_View() {
+		setTitle("Quản Lý Nhân Viên");
        
         this.init();
         setVisible(true);

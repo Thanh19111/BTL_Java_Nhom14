@@ -68,6 +68,7 @@ public class PositionManagement_EditPosition extends JFrame {
 	    }
 	}
     public PositionManagement_EditPosition(){
+    	setTitle("Quản Lý Nhân Viên");
     	String[] columnNames = {
                 "ID", "Chức vụ","Lương"
             };
@@ -166,7 +167,7 @@ public class PositionManagement_EditPosition extends JFrame {
         panel_2.add(idText);
         
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(25, 118, 210));
+        panel_1.setBackground(new Color(0, 0, 0));
         panel_1.setBounds(0, 0, 1062, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);
@@ -198,7 +199,7 @@ public class PositionManagement_EditPosition extends JFrame {
         	}
         });
         backButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        backButton.setBounds(0, 0, 100, 37);
+        backButton.setBounds(952, 36, 100, 37);
         panel_1.add(backButton);
         
         suaThongTinChucVuText = new JLabel("SỬA THÔNG TIN CHỨC VỤ");
@@ -229,7 +230,7 @@ public class PositionManagement_EditPosition extends JFrame {
     panel_2.add(table_1);
     
     JScrollPane scrollPane = new JScrollPane(table_1);
-    scrollPane.setBounds(325, 47, 687, 355);
+    scrollPane.setBounds(325, 47, 711, 355);
     panel_2.add(scrollPane);
     
     loadPosition();

@@ -53,11 +53,12 @@ public class PositionManagement_AddPosition extends JFrame {
 		});
 	}
     public PositionManagement_AddPosition() {
+    	setTitle("Quản Lý Nhân Viên");
     	String[] columnNames = {
                 "ID", "Chức vụ","Lương"
     	};
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 600);
+        setBounds(100, 100, 1096, 600);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -65,7 +66,7 @@ public class PositionManagement_AddPosition extends JFrame {
         contentPane.setLayout(null);
         
         JPanel panel_2 = new JPanel();
-        panel_2.setBounds(0, 91, 786, 472);
+        panel_2.setBounds(0, 91, 1108, 472);
         contentPane.add(panel_2);
         panel_2.setLayout(null);
         
@@ -150,8 +151,8 @@ public class PositionManagement_AddPosition extends JFrame {
         panel_2.add(cancelButton);
         
         JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(25, 118, 210));
-        panel_1.setBounds(0, 0, 1062, 92);
+        panel_1.setBackground(new Color(0, 0, 0));
+        panel_1.setBounds(0, 0, 1097, 92);
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
@@ -182,7 +183,7 @@ public class PositionManagement_AddPosition extends JFrame {
         	}
         });
         backButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        backButton.setBounds(0, 0, 100, 37);
+        backButton.setBounds(974, 31, 100, 37);
         panel_1.add(backButton);
         
         JLabel lblNewLabel_6 = new JLabel("THÊM CHỨC VỤ MỚI");
@@ -211,7 +212,7 @@ public class PositionManagement_AddPosition extends JFrame {
         panel_2.add(table_1);
         
         JScrollPane scrollPane = new JScrollPane(table_1);
-        scrollPane.setBounds(305, 33, 406, 496);
+        scrollPane.setBounds(305, 33, 630, 415);
         panel_2.add(scrollPane);
         
         loadPosition();

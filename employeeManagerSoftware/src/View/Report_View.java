@@ -9,10 +9,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,8 +24,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import ReportTest.Report_Main;
+import Data.DatabaseConnection;
 
 public class Report_View extends JFrame {
 
@@ -33,16 +33,16 @@ public class Report_View extends JFrame {
     private JTextField totalEmployee;
     private DefaultTableModel tableModel;
     private DefaultTableModel tableModel2;
-    private Report_Main rm;
 
     public Report_View() {
-    	this.rm = new Report_Main();
-    	String[] columnNames = { "Chức vụ", "Số lượng nhân viên" };
-    	tableModel = new DefaultTableModel(columnNames, 0);
-    	String[] columnNames2 = { "Chức vụ", "Mức lương" };
-    	tableModel2 = new DefaultTableModel(columnNames2, 0);
-    	this.init();
-		setVisible(true);
+    	setTitle("Quản Lý Nhân Viên");
+        String[] columnNames = { "ID", "chức vụ", "số lượng nhân viên", "tổng lương" };
+        tableModel = new DefaultTableModel(columnNames, 0);
+        String[] columnNames2 = { "ID phòng ban", "tên phòng ban", "số lượng nhân viên", "tổng lương" };
+        tableModel2 = new DefaultTableModel(columnNames2, 0);
+        this.init();
+        getNumberOfEmployee();
+        setVisible(true);
 	}
 
     public void init() {
@@ -59,14 +59,14 @@ public class Report_View extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+        String logoPath = "D:\\Users\\Downloads\\lg.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(36, 5, 95, 50);
+        logo.setBounds(8, 5, 150, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");
@@ -296,7 +296,7 @@ public class Report_View extends JFrame {
         totalEmployee.setBounds(238, 10, 100, 36);
         panel_2.add(totalEmployee);
         totalEmployee.setColumns(10);
-        getNumberOfEmployee();
+
 
         JButton backButton = new JButton("Quay lại");
         backButton.addActionListener(new ActionListener() {
@@ -332,74 +332,88 @@ public class Report_View extends JFrame {
         panel_3.setBackground(new Color(224, 255, 255));
         panel_3.setBounds(177, 64, 885, 498);
         contentPane.add(panel_3);
-        panel_3.setLayout(new GridLayout(2, 1, 0, 10)); // 2 hàng, 1 cột, khoảng cách giữa các hàng là 10
+        panel_3.setLayout(new GridLayout(2, 1, 0, 10));
 
         JTable table_1 = new JTable(tableModel);
         table_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
         JScrollPane scrollPane = new JScrollPane(table_1);
         panel_3.add(scrollPane);
-        loadEmployeeData();
+        
 
         JTable table_2 = new JTable(tableModel2);
         table_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-
+        loadEmployeeData();
         // Add the table to a JScrollPane
         JScrollPane scrollPane2 = new JScrollPane(table_2);
         panel_3.add(scrollPane2); 
-        loadPositionData();
+   
 
         JPanel panel_4 = new JPanel();
         panel_4.setBackground(new Color(224, 255, 255));
         panel_4.setBounds(166, 0, 896, 562);
         contentPane.add(panel_4);
+        loadPositionData();
     }
     
-    private void loadEmployeeData() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("D:\\Employee.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 11) {
-                    String position = parts[9];
-                    int count = 1;
-                    // Check if the position already exists in the table
-                    boolean found = false;
-                    for (int i = 0; i < tableModel.getRowCount(); i++) {
-                        if (tableModel.getValueAt(i, 0).equals(position)) {
-                            count += (int) tableModel.getValueAt(i, 1);
-                            tableModel.setValueAt(count, i, 1);
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        tableModel.addRow(new Object[]{position, count});
-                    }
-                }
+//bang 1 : id nhanvien , chuc vu , so luong , tong luong
+//bang 2 : id phong ban , ten phong ban , so luong , tong luong
+    public void loadEmployeeData() {
+        String sql = "SELECT " +
+                     "p.positionID AS 'ID Chức vụ', " +
+                     "p.positionName AS 'Chức vụ', " +
+                     "COUNT(e.employeeID) AS 'Số lượng', " +
+                     "SUM(p.positionSalary) AS 'Tổng lương' " +
+                     "FROM Employee e " +
+                     "INNER JOIN Position p ON e.positionID = p.positionID " +
+                     "GROUP BY p.positionID, p.positionName";
+
+        ResultSet rSet = DatabaseConnection.QueryAll(sql);
+        try {
+            while (rSet.next()) {
+                int id = rSet.getInt("ID Chức vụ");
+                String name = rSet.getString("Chức vụ");
+                int count = rSet.getInt("Số lượng");
+                float total = rSet.getFloat("Tổng lương");
+
+                // Thêm dữ liệu vào bảng
+                tableModel.addRow(new Object[]{id, name, count, total});
             }
-        } catch (IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    	public void loadPositionData() {
+    	    String sql2 = "SELECT " +
+    	                 "Department.departmentID, " +
+    	                 "Department.departmentName, " +
+    	                 "COUNT(emp.employeeID) AS employeeCount, " +
+    	                 "SUM(p.positionSalary * emp.salary) AS totalSalary " +
+    	                 "FROM Department " +
+    	                 "INNER JOIN Employee emp ON Department.departmentID = emp.departmentID " +
+    	                 "INNER JOIN Position p ON emp.positionID = p.positionID " +
+    	                 "GROUP BY Department.departmentID, Department.departmentName;";
+    	    ResultSet rSet = DatabaseConnection.QueryAll(sql2);
+    	    try {
+    	        while (rSet.next()) {
+    	            int id = rSet.getInt("departmentID");
+    	            String name = rSet.getString("departmentName");
+    	            int count = rSet.getInt("employeeCount");
+    	            float total = rSet.getFloat("totalSalary");
+    	            tableModel2.addRow(new Object[]{id, name, count, total});
+    	        }
+    	    } catch (SQLException e) {
+    	        e.printStackTrace();
+    	    }
+    	
+
     }
 
-    private void loadPositionData() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("D:\\Position.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String position = parts[1];
-                    double salary = Double.parseDouble(parts[2]);
-                    tableModel2.addRow(new Object[]{position, salary});
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
     public void getNumberOfEmployee() {
-    	totalEmployee.setText(Integer.toString(rm.total_Employee()));
+        int total = DatabaseConnection.getTotalEmployee();
+        totalEmployee.setText(Integer.toString(total));
     }
+
+
 }

@@ -511,6 +511,7 @@ public class AccountManagement_ViewMain extends JFrame {
 	        JOptionPane.showMessageDialog(this, "Vui lòng nhập tên tài khoản.", "Lỗi", JOptionPane.ERROR_MESSAGE);
 	        return;
 	    }
+	    searchUsername = Utils.encrypt(searchUsername);
 
 	    boolean accountFound = false;
 	    for(Account acc : this.arr)

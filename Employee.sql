@@ -103,4 +103,17 @@ BEGIN
     WHERE employeeId = @empid;
 END;
 GO
+-----------------------SUA LUONG THEO ID--------------------------
+CREATE PROC EditSalary (
+    @empid INT,
+	@salary decimal(10,2)
+)
+
+AS
+BEGIN
+    UPDATE dbo.Employee
+    SET salary   =  @salary
+    WHERE employeeId = @empid;
+END;
+GO
 Execute AddEmployee 4, thanh, "2/2/2000", nam,hd,445,"3/3/2004",6.7,6,1,2
