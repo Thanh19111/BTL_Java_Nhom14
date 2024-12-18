@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.JTable;
@@ -79,7 +80,7 @@ public class PositionManagement_View extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+        String logoPath = "D:\\Users\\Downloads\\lg.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
@@ -498,7 +499,7 @@ public class PositionManagement_View extends JFrame {
     	for (int i = 0; i < this.pos.size(); i++) {
 	        Position pos = this.pos.get(i);
 	        this.tableModel.addRow(new Object[]{
-	            Utils.decrypt(String.valueOf(pos.getPositionID())),
+	            pos.getPositionID(),
 	            pos.getPositionName(),
 	            pos.getPositionSalary()
 	        });
@@ -506,28 +507,31 @@ public class PositionManagement_View extends JFrame {
    	}
     
     public void position_search() {
-    	String id = ID_SearchBox.getText().trim();
-    	if (id.isEmpty() || id.equals("Nhập ID chức vụ")) {
-    	    JOptionPane.showMessageDialog(null, "Vui lòng nhập ID chức vụ", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    	    return;
-    	}
+    	try {
+    		String id = ID_SearchBox.getText().trim();
+        	if (id.isEmpty() || id.equals("Nhập ID chức vụ")) {
+        	    JOptionPane.showMessageDialog(null, "Vui lòng nhập ID chức vụ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        	    return;
+        	}
 
-	    boolean accountFound = false;
-	    for (Position pss : this.pos)
-	    {String ids = String.valueOf(pss.getPositionID());
-	    	if (ids==id)
-	    	{
-	    		accountFound = true;
-	    		PositionManagement_SearchResult searchResultFrame = new PositionManagement_SearchResult(String.valueOf(pss.getPositionID()), pss.getPositionName(), String.valueOf(pss.getPositionSalary()));
-	    		searchResultFrame.setVisible(true);
-	    		this.dispose();
-	    	}
-	    }
-	        
-
-	    if (!accountFound) {
-	        JOptionPane.showMessageDialog(this, "ID không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	    }
+    	    boolean accountFound = false;
+    	    ArrayList<Position> arrayList = DatabaseConnection.PositionQuery("Select * from Position");
+    	    for (Position position : arrayList) {
+    			if(position.getPositionID() == Integer.parseInt(id))
+    			{
+    				accountFound = true;
+    	    		PositionManagement_SearchResult searchResultFrame = new PositionManagement_SearchResult(position.getPositionID() + "",position.getPositionName() + "",position.getPositionSalary() + "");
+    	    		searchResultFrame.setVisible(true);
+    	    		this.dispose();
+    			}
+    		}
+    	 
+    	    if (!accountFound) {
+    	        JOptionPane.showMessageDialog(this, "ID không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+    	    }
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, "ID không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}
 	}
     
     public void loadAccountData() {

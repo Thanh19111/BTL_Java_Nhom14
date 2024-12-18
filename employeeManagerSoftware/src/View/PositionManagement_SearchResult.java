@@ -51,7 +51,7 @@ private static String id; private static String positionName; private static Str
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+        String logoPath = "D:\\Users\\Downloads\\lg.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);

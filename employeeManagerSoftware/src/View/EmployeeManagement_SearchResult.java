@@ -52,14 +52,14 @@ public class EmployeeManagement_SearchResult extends JFrame {
         contentPane.add(panel_1);
         panel_1.setLayout(null);
         
-        String logoPath = "D:\\Study\\Code\\Java\\employeeManagerSoftware_Group10\\FPT_Software_logo.png";
+        String logoPath = "D:\\Users\\Downloads\\lg.png";
         ImageIcon logoIcon = new ImageIcon(logoPath);
         Image logoImage = logoIcon.getImage();
         Image scaledLogoImage = logoImage.getScaledInstance(105, 50, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(36, 5, 95, 50);
+        logo.setBounds(10, 5, 147, 50);
         panel_1.add(logo);
         
         JPanel panel_3 = new JPanel();
