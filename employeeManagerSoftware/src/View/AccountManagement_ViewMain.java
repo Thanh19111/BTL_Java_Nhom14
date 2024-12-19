@@ -90,7 +90,7 @@ public class AccountManagement_ViewMain extends JFrame {
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(10, 5, 130, 50);
+        logo.setBounds(36, 5, 95, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");

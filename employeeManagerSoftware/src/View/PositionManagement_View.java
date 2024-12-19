@@ -87,7 +87,7 @@ public class PositionManagement_View extends JFrame {
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogoImage);
         panel_1.setLayout(null);
         JLabel logo = new JLabel(scaledLogoIcon);
-        logo.setBounds(20, 5, 121, 50);
+        logo.setBounds(36, 5, 95, 50);
         panel_1.add(logo);
         
         JButton employeeButton = new JButton("Nhân viên");
